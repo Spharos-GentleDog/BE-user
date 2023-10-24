@@ -18,7 +18,7 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-
+    // 추후 게이트웨이로 옮길 예정
     private final JwtAuthenticationFilter jwtTokenProvider;
     private final AuthenticationProvider authenticationProvider;
 

@@ -31,14 +31,7 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
     @Column(name = "address", columnDefinition = "int default 1")
-    private int address;
-
-    /**
-     * 의존성 역전
-     * Entity -> Domain
-     *
-     * @return
-     */
+    private Long address;
 
     public void hashPassword(String password) {
         //      this.password = password;
