@@ -9,6 +9,7 @@ import egenius.user.infrastructure.UserRepository;
 import egenius.user.response.SignUpResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,11 +23,11 @@ public class AuthenticationServiceImple implements AuthenticationService{
     private final UserRepository userRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final ModelMapper modelMapper;
 
     private final RedisTemplate redisTemplate;
     @Value("${JWT.token.refresh-expiration-time}")
     private long refreshExpirationTime;
-
 
     /**
      * 1. 시큐리티 회원가입
@@ -34,13 +35,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
 
     @Override
     public SignUpResponse signUp(SignUpRequestDto signUpRequestDto) throws BaseException {
-
-        User user = User.builder()
-                .loginId(signUpRequestDto.getLoginId())
-                .password(signUpRequestDto.getPassword())
-                .name(signUpRequestDto.getName())
-                .phoneNumber(signUpRequestDto.getPhoneNumber())
-                .build();
+        User user = modelMapper.map(signUpRequestDto, User.class);
 
         String jwtToken = jwtTokenProvider.generateToken(user);
         String refreshToken = jwtTokenProvider.generateRefreshToken(user);
