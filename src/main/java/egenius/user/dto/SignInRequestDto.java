@@ -3,11 +3,9 @@ package egenius.user.dto;
 import lombok.*;
 
 @Getter
-public class SignUpRequestDto {
+public class SignInRequestDto {
 
     private String loginId;
     private String password;
-    private String name;
-    private String phoneNumber;
 
 }

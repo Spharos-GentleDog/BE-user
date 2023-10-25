@@ -1,10 +1,12 @@
 package egenius.user.presentation;
 
 
-import egenius.global.base.BaseException;
+import egenius.global.exception.BaseException;
 import egenius.global.base.BaseResponse;
 import egenius.user.application.AuthenticationService;
+import egenius.user.dto.SignInRequestDto;
 import egenius.user.dto.SignUpRequestDto;
+import egenius.user.response.SignInResponse;
 import egenius.user.response.SignUpResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -22,17 +24,28 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final AuthenticationService authenticationService;
-    private final ModelMapper modelMapper;
-
 
     @Operation(summary = "회원가입", description = "회원가입", tags = { "User Sign" })
     @PostMapping("/signup")
-    public BaseResponse<SignUpResponse> signup(
+    public BaseResponse<String> signUp(
             @RequestBody SignUpRequestDto signUpRequestDto
             ) {
         try {
             SignUpResponse signUpResponse = authenticationService.signUp(signUpRequestDto);
-            return new BaseResponse<>(signUpResponse);
+            return new BaseResponse<>("회원가입 성공");
+        } catch (BaseException e) {
+            return new BaseResponse<>(e.getStatus());
+        }
+    }
+
+    @Operation(summary = "로그인", description = "로그인", tags = { "User Sign" })
+    @PostMapping("/signin")
+    public BaseResponse<SignInResponse> signIn(
+            @RequestBody SignInRequestDto signinRequestDto
+    ) {
+        try {
+            SignInResponse signInResponse = authenticationService.signIn(signinRequestDto);
+            return new BaseResponse<>(signInResponse);
         } catch (BaseException e) {
             return new BaseResponse<>(e.getStatus());
         }

@@ -1,6 +1,8 @@
 package egenius.global.base;
 
 
+import org.springframework.http.HttpStatusCode;
+
 public record BaseResponse<T>(Boolean isSuccess, String message, int code, T result) {
 
     // 요청 성공한 경우

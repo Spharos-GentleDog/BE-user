@@ -1,6 +1,6 @@
 package egenius.user.entity;
 
-import egenius.global.base.BaseTimeEntity;
+import egenius.global.base.BaseTimeEntity2;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,11 +11,11 @@ import java.util.Collection;
 
 @Entity
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class User extends BaseTimeEntity implements UserDetails {
+public class User extends BaseTimeEntity2 implements UserDetails {
 
 
     // DDD관점에서는 비즈니스 로직을 엔티티에 작성해도 괜찮음, 고려해볼것

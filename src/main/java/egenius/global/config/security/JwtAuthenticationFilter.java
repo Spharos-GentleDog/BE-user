@@ -1,6 +1,6 @@
 package egenius.global.config.security;
 
-import egenius.global.base.BaseException;
+import egenius.global.exception.BaseException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // JWT 토큰 및 사용자 ID를 초기화합니다.
         final String jwt;
         final String loginId;
-        // authHeader가 null이거나 "Bearer "로 시작하지 않으면 다음 필터로 전달합니다.
+        // 헤더가 null이거나, "Bearer"로 시작하지 않는다면 토큰 인증을 진행하지 않음
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;

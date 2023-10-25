@@ -1,5 +1,6 @@
-package egenius.global.base;
+package egenius.global.exception;
 
+import egenius.global.base.BaseResponseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

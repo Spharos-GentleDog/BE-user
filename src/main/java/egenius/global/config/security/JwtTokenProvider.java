@@ -1,6 +1,6 @@
 package egenius.global.config.security;
 
-import egenius.global.base.BaseException;
+import egenius.global.exception.BaseException;
 import egenius.global.base.BaseResponseStatus;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -22,6 +22,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+
+import static egenius.global.base.BaseResponseStatus.TokenExpiredException;
+import static egenius.global.base.BaseResponseStatus.TokenInvalidException;
 
 @Slf4j
 @Service
@@ -92,9 +95,9 @@ public class JwtTokenProvider {
         // parseClaimsJwt에서 토큰이 잘못된 경우 error를 발생시킨다! -> 발생한 오류는 ExceptionHandlerFilter로 가서 처리된다!
         catch (ExpiredJwtException e) {
             log.error("토큰오류 -> " + e);
-            throw new BaseException(BaseResponseStatus.TokenExpiredException);
+            throw new BaseException(TokenExpiredException);
         } catch (Exception e) {
-            throw new BaseException(BaseResponseStatus.TokenInvalidException);
+            throw new BaseException(TokenInvalidException);
         }
     }
 
