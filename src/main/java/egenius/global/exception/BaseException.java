@@ -7,7 +7,8 @@ import lombok.Getter;
 public class BaseException extends Exception {
     private BaseResponseStatus status;
 
-    public void setStatus(BaseResponseStatus status) {
+    public BaseException(BaseResponseStatus status) {
         this.status = status;
     }
+
 }

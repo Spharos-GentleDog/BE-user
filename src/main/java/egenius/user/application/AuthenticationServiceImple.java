@@ -1,6 +1,5 @@
 package egenius.user.application;
 
-
 import egenius.global.exception.BaseException;
 import egenius.global.config.security.JwtTokenProvider;
 import egenius.global.util.RedisUtil;
@@ -20,12 +19,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.concurrent.TimeUnit;
-
 import static egenius.global.base.BaseResponseStatus.*;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthenticationServiceImple implements AuthenticationService{
 
@@ -54,7 +52,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
         userRepository.save(user);
 
         return SignUpResponse.builder()
-                .loginId(signUpRequestDto.getLoginId())
+                .loginId(signUpRequestDto.getUserEmail())
                 .build();
     }
 
@@ -62,7 +60,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
     public SignInResponse signIn(SignInRequestDto signInRequestDto) throws BaseException {
 
         // 로그인 아이디가 없다면 에러
-        User user = userRepository.findByLoginId(signInRequestDto.getLoginId())
+        User user = userRepository.findByUserEmail(signInRequestDto.getUserEmail())
                 .orElseThrow(() -> new BaseException(FAILED_TO_LOGIN));
 
         // 탈퇴한 회원이면 로그인 불가
@@ -72,7 +70,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        signInRequestDto.getLoginId(),
+                        signInRequestDto.getUserEmail(),
                         signInRequestDto.getPassword()
                 )
         );
@@ -86,7 +84,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
         return SignInResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .loginId(signInRequestDto.getLoginId())
+                .loginId(signInRequestDto.getUserEmail())
                 .build();
     }
 
