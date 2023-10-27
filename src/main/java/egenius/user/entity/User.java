@@ -7,11 +7,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Entity
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
@@ -22,8 +23,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "login_id", length = 30, nullable = false)
-    private String loginId;
+    @Column(name = "user_email", length = 30, nullable = false)
+    private String userEmail;
     @Column(name = "password", length = 100)
     private String password;
     @Column(name = "name", length = 20)
@@ -32,6 +33,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String phoneNumber;
     @Column(name = "address", columnDefinition = "int default 1")
     private Long address;
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
 
     public void hashPassword(String password) {
         //      this.password = password;
@@ -45,26 +48,27 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return loginId;
+        return userEmail;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
+
 }

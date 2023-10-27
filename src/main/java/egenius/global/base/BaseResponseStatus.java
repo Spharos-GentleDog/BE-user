@@ -1,56 +1,54 @@
 package egenius.global.base;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 @Getter
+@AllArgsConstructor
 public enum BaseResponseStatus {
 
     /**
      * 200: 요청 성공
      **/
-    SUCCESS(true, 200, "요청에 성공하였습니다."),
+    SUCCESS(HttpStatus.OK, true, 200, "요청에 성공하였습니다."),
 
     /**
-     * 2000: Request 오류
-     **/
-    // Common
-    POST_EXISTS_LOGIN_ID(false, 2000, "중복된 아이디입니다."),
-    TokenExpiredException(false, 2001, "토큰이 만료되었습니다."),
-    TokenInvalidException(false, 2002, "토큰이 유효하지 않습니다."),
-    TokenNullException(false, 2003, "토큰이 존재하지 않습니다."),
+     * 900: 기타 에러
+     */
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, false, 900, "Internal server error"),
+
+
+
     /**
-     * 3000: Response 오류
-     **/
-    // Common
-    FAILED_TO_LOGIN(false, 3000, "없는 아이디거나 비밀번호가 틀렸습니다."),
-    NO_LOOKUP_VALUE(false, 3001, "조회된 데이터가 없습니다."),
-    JWT_CREATE_FAILED(false, 3002, "토큰 생성에 실패했습니다."),
-    NO_EXIST_USER(false, 3003, "존재하지 않는 유저 정보입니다."),
-    NO_POINT_HISTORY(false, 3004, "포인트 내역 조회에 실패했습니다."),
-    FAILED_TO_CARD_NUMBER(false, 3005, "바코드 생성에 실패했습니다"),
+     * 요청 실패
+     */
+    // Token
+    TokenExpiredException(HttpStatus.BAD_REQUEST,false, 2001, "토큰이 만료되었습니다."),
+    TokenInvalidException(HttpStatus.BAD_REQUEST, false, 2002, "토큰이 유효하지 않습니다."),
+    TokenNullException(HttpStatus.BAD_REQUEST, false, 2003, "토큰이 존재하지 않습니다."),
+    JWT_CREATE_FAILED(HttpStatus.BAD_REQUEST, false, 2004, "토큰 생성에 실패했습니다."),
 
     // User
-    USER_INSERT_FAILED(false, 4000, "사용자 회원가입에 실패했습니다."),
-    USER_RETRIEVE_FAILED(false, 4001, "회원정보 조회에 실패했습니다."),
-    USER_UPDATE_FAILED(false, 4002, "회원정보 변경에 실패했습니다."),
-    PASSWORD_RETRIEVE_FAILED(false, 4003, "비밀번호 조회에 실패했습니다."),
-    PASSWORD_UPDATE_FAILED(false, 4004, "비밀번호 변경에 실패했습니다."),
-    PASSWORD_CONTAIN_NUM_FAILED(false, 4005,"휴대폰 번호를 포함한 비밀번호 입니다."),
-    PASSWORD_SAME_FAILED(false, 4006,"현재 사용중인 비밀번호 입니다."),
-    POINT_PASSWORD_RETRIEVE_FAILED(false, 4007,"포인트 비밀번호 조회에 실패했습니다."),
-    POINT_PASSWORD_UPDATE_FAILED(false, 4008, "포인트 비밀번호 변경에 실패했습니다."),
-    NO_USER_POINT_LIST_HISTORY_FAILED(false, 4009, "해당하는 유저 포인트 리스트가 없습니다."),
-    WITHDRAWAL_USER(false, 4010, "탈퇴한 회원입니다.");
+    POST_EXISTS_LOGIN_ID(HttpStatus.BAD_REQUEST, false, 2101, "중복된 아이디입니다."),
+    MASSAGE_SEND_FAILED(HttpStatus.BAD_REQUEST, false, 2102, "인증번호 전송에 실패했습니다."),
+    MASSAGE_VALID_FAILED(HttpStatus.BAD_REQUEST, false, 2103, "인증번호가 일치하지 않습니다."),
+    FAILED_TO_LOGIN(HttpStatus.BAD_REQUEST, false, 2104, "없는 아이디거나 비밀번호가 틀렸습니다."),
+    NO_LOOKUP_VALUE(HttpStatus.BAD_REQUEST, false, 2105, "조회된 데이터가 없습니다."),
+    WITHDRAWAL_USER(HttpStatus.BAD_REQUEST, false, 2106, "탈퇴한 회원입니다.");
 
+//    NO_EXIST_USER(false, 2104, "존재하지 않는 유저 정보입니다."),
+//    FAILED_TO_CARD_NUMBER(false, 2106, "바코드 생성에 실패했습니다"),
+//    USER_RETRIEVE_FAILED(false, 2107, "회원정보 조회에 실패했습니다."),
+//    USER_UPDATE_FAILED(false, 2108, "회원정보 변경에 실패했습니다."),
+//    PASSWORD_RETRIEVE_FAILED(false, 2109, "비밀번호 조회에 실패했습니다."),
+//    PASSWORD_UPDATE_FAILED(false, 2110, "비밀번호 변경에 실패했습니다."),
+//    PASSWORD_CONTAIN_NUM_FAILED(false, 2111,"휴대폰 번호를 포함한 비밀번호 입니다."),
+//    PASSWORD_SAME_FAILED(false, 2112,"현재 사용중인 비밀번호 입니다.");
 
+    private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;
     private final int code;
-    private final String message;
-
-
-    BaseResponseStatus(boolean isSuccess, int code, String message) {
-        this.isSuccess = isSuccess;
-        this.code = code;
-        this.message = message;
-    }
+    private String message;
 }

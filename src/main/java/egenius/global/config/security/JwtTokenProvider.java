@@ -1,7 +1,6 @@
 package egenius.global.config.security;
 
-import egenius.global.base.BaseException;
-import egenius.global.base.BaseResponseStatus;
+import egenius.global.exception.BaseException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,6 +21,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+
+import static egenius.global.base.BaseResponseStatus.TokenExpiredException;
+import static egenius.global.base.BaseResponseStatus.TokenInvalidException;
 
 @Slf4j
 @Service
@@ -57,7 +59,7 @@ public class JwtTokenProvider {
      * @return jwt토큰에서 추출한 사용자 ID 반환
      * 토큰에서 추출한 클레임에서 사용자 ID를 추출하여 반환합니다.
      */
-    public String getLoginId(String token) throws BaseException {
+    public String getUserEmail(String token) throws BaseException {
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -92,9 +94,9 @@ public class JwtTokenProvider {
         // parseClaimsJwt에서 토큰이 잘못된 경우 error를 발생시킨다! -> 발생한 오류는 ExceptionHandlerFilter로 가서 처리된다!
         catch (ExpiredJwtException e) {
             log.error("토큰오류 -> " + e);
-            throw new BaseException(BaseResponseStatus.TokenExpiredException);
+            throw new BaseException(TokenExpiredException);
         } catch (Exception e) {
-            throw new BaseException(BaseResponseStatus.TokenInvalidException);
+            throw new BaseException(TokenInvalidException);
         }
     }
 
@@ -163,7 +165,7 @@ public class JwtTokenProvider {
      * 토큰이 만료되지 않은경우 토큰 유효
      */
     public boolean validateToken(String token, UserDetails userDetails) throws BaseException {
-        final String loginId = getLoginId(token);
+        final String loginId = getUserEmail(token);
         //  뽑아온 loginId와 받은 loginId가 같고 유효기간이 지나지 않았다면
         return (loginId.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }

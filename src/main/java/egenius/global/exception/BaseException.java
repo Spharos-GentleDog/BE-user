@@ -1,14 +1,14 @@
-package egenius.global.base;
+package egenius.global.exception;
 
-import lombok.AllArgsConstructor;
+import egenius.global.base.BaseResponseStatus;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
 public class BaseException extends Exception {
     private BaseResponseStatus status;
 
-    public void setStatus(BaseResponseStatus status) {
+    public BaseException(BaseResponseStatus status) {
         this.status = status;
     }
+
 }
