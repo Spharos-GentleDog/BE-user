@@ -1,6 +1,6 @@
 package egenius.user.dto;
 
-import lombok.*;
+import lombok.Getter;
 
 @Getter
 public class SignUpRequestDto {

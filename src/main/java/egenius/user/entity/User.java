@@ -8,7 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,8 +32,11 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String name;
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
-    @Column(name = "address", columnDefinition = "int default 1")
-    private Long address;
+
+    @OneToMany(mappedBy = "user")
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
+    private List<Address> address = new ArrayList<>();
+
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
