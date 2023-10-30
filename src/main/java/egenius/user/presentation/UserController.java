@@ -24,7 +24,7 @@ public class UserController {
 
     @Operation(summary = "회원가입", description = "회원가입", tags = { "User Sign" })
     @PostMapping("/signup")
-    public BaseResponse<String> signUp(
+    public BaseResponse<?> signUp(
             @RequestBody SignUpRequestDto signUpRequestDto) {
             authenticationService.signUp(signUpRequestDto);
             return new BaseResponse<>();

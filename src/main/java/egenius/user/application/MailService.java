@@ -3,7 +3,7 @@ package egenius.user.application;
 import jakarta.mail.MessagingException;
 
 public interface MailService {
-    void sendEmail(String email) throws MessagingException;
+    void sendEmailAuthentication(String email) throws MessagingException;
 
     void checkEmail(String email);
 
