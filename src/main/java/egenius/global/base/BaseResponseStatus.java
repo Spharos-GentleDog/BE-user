@@ -29,6 +29,7 @@ public enum BaseResponseStatus {
     JWT_CREATE_FAILED(HttpStatus.BAD_REQUEST, false, 2004, "토큰 생성에 실패했습니다."),
     JWT_VALID_FAILED(HttpStatus.BAD_REQUEST, false, 2005, "토큰 검증에 실패했습니다."),
     EXPIRED_AUTH_CODE(HttpStatus.BAD_REQUEST, false, 2006, "인증번호가 만료되었습니다."),
+    WRONG_AUTH_CODE(HttpStatus.BAD_REQUEST, false, 2007, "인증번호가 일치하지 않습니다."),
 
     // User
     DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, false, 2100, "사용중인 이메일입니다."),

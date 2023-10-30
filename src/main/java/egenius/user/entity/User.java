@@ -18,7 +18,6 @@ import java.util.Collection;
 @ToString
 public class User extends BaseTimeEntity implements UserDetails {
 
-
     // DDD관점에서는 비즈니스 로직을 엔티티에 작성해도 괜찮음, 고려해볼것
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

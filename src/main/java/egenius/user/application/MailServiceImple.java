@@ -81,7 +81,7 @@ public class MailServiceImple implements MailService{
                 , "UTF-8", "html");
         message.setFrom(configEmail);
 
-        redisUtil.setDataExpire(email, authCode, 60 * 30L);
+        redisUtil.createDataExpire(email, authCode, 60 * 30L);
         return message;
     }
 
@@ -90,13 +90,12 @@ public class MailServiceImple implements MailService{
      * 만약 Redis에 해당 이메일로 된 값이 있다면 db에서 이를 삭제하고 진행한다.
      * @param email
      */
-    public void sendEmail(String email) throws MessagingException {
+    public void sendEmailAuthentication(String email) throws MessagingException {
         if (redisUtil.existData(email)) {
             redisUtil.deleteData(email);
         }
 
         MimeMessage emailForm = createEmailForm(email);
-        log.info("emailForm is : {}", emailForm);
         mailSender.send(emailForm);
     }
 
@@ -111,15 +110,21 @@ public class MailServiceImple implements MailService{
     }
 
     /**
-     * Redis에서 키와 값을 꺼내 봐서 일치하면 true, 그렇지 않으면 false를 반환
+     * Redis에서 키와 값을 꺼내 봐서 일치하면 인증 성공
      *
      * @param email
      * @param code
      */
     public void verifyEmailCode(String email, String code) {
         String codeFoundByEmail = redisUtil.getData(email);
-        if (codeFoundByEmail == null) {
+
+        if (codeFoundByEmail != null && codeFoundByEmail.equals(code)) {
+            redisUtil.deleteData(email);
+        } else if (codeFoundByEmail == null) {
             throw new BaseException(BaseResponseStatus.EXPIRED_AUTH_CODE);
+        } else {
+            throw new BaseException(BaseResponseStatus.WRONG_AUTH_CODE);
         }
+
     }
 }

@@ -20,21 +20,21 @@ public class EmailController {
 
     @Operation(summary = "메일인증 요청", description = "메일인증 요청", tags = { "User Sign" })
     @PostMapping("/signup/emailauth/{email}")
-    public BaseResponse<?> sendEmailPath(@PathVariable String email) throws MessagingException {
-            mailService.sendEmail(email);
-            return new BaseResponse<>();
+    public BaseResponse<?> sendEmailAuthentication(@PathVariable("email") String email) throws MessagingException {
+        mailService.sendEmailAuthentication(email);
+        return new BaseResponse<>();
     }
 
     @Operation(summary = "메일중복 검사", description = "메일 중복 검사", tags = { "User Sign" })
     @PostMapping("/signup/emailcheck/{email}")
-    public BaseResponse<?> checkEmail(@PathVariable String email) {
+    public BaseResponse<?> checkEmail(@PathVariable("email") String email) {
         mailService.checkEmail(email);
         return new BaseResponse<>();
     }
 
     @Operation(summary = "메일인증", description = "메일인증", tags = { "User Sign" })
     @PostMapping("signup/authcode")
-    public BaseResponse<?> sendEmailAndCode(@RequestBody EmailRequestDto emailRequestDto) {
+    public BaseResponse<?> emailVerify(@RequestBody EmailRequestDto emailRequestDto) {
 
         mailService.verifyEmailCode(emailRequestDto.getEmail(), emailRequestDto.getCode());
         return new BaseResponse<>();

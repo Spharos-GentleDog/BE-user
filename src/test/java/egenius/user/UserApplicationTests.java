@@ -23,7 +23,7 @@ class UserApplicationTests {
         String code = "aaa111";
 
         //when
-        redisUtil.setDataExpire(email, code, 60 * 60L);
+        redisUtil.createDataExpire(email, code, 60 * 60L);
 
         //then
         Assertions.assertTrue(redisUtil.existData("test@test.com"));

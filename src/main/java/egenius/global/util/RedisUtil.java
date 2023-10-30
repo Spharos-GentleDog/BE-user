@@ -24,8 +24,8 @@ public class RedisUtil {
         return Boolean.TRUE.equals(template.hasKey(key));
     }
 
-    // 값 저장
-    public void setDataExpire(String key, String value, long duration) {
+    // 값 저장 및 만료 시간 설정
+    public void createDataExpire(String key, String value, long duration) {
         ValueOperations<String, String> valueOperations = template.opsForValue();
         Duration expireDuration = Duration.ofSeconds(duration);
         valueOperations.set(key, value, expireDuration);
