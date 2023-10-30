@@ -19,24 +19,24 @@ public enum BaseResponseStatus {
      */
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, false, 900, "Internal server error"),
 
-
-
     /**
      * 요청 실패
      */
-    // Token
+    // Token, Code
     TokenExpiredException(HttpStatus.BAD_REQUEST,false, 2001, "토큰이 만료되었습니다."),
     TokenInvalidException(HttpStatus.BAD_REQUEST, false, 2002, "토큰이 유효하지 않습니다."),
     TokenNullException(HttpStatus.BAD_REQUEST, false, 2003, "토큰이 존재하지 않습니다."),
     JWT_CREATE_FAILED(HttpStatus.BAD_REQUEST, false, 2004, "토큰 생성에 실패했습니다."),
+    JWT_VALID_FAILED(HttpStatus.BAD_REQUEST, false, 2005, "토큰 검증에 실패했습니다."),
+    EXPIRED_AUTH_CODE(HttpStatus.BAD_REQUEST, false, 2006, "인증번호가 만료되었습니다."),
 
     // User
-    POST_EXISTS_LOGIN_ID(HttpStatus.BAD_REQUEST, false, 2101, "중복된 아이디입니다."),
-    MASSAGE_SEND_FAILED(HttpStatus.BAD_REQUEST, false, 2102, "인증번호 전송에 실패했습니다."),
-    MASSAGE_VALID_FAILED(HttpStatus.BAD_REQUEST, false, 2103, "인증번호가 일치하지 않습니다."),
-    FAILED_TO_LOGIN(HttpStatus.BAD_REQUEST, false, 2104, "없는 아이디거나 비밀번호가 틀렸습니다."),
-    NO_LOOKUP_VALUE(HttpStatus.BAD_REQUEST, false, 2105, "조회된 데이터가 없습니다."),
-    WITHDRAWAL_USER(HttpStatus.BAD_REQUEST, false, 2106, "탈퇴한 회원입니다.");
+    DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, false, 2100, "사용중인 이메일입니다."),
+    MASSAGE_SEND_FAILED(HttpStatus.BAD_REQUEST, false, 2101, "인증번호 전송에 실패했습니다."),
+    MASSAGE_VALID_FAILED(HttpStatus.BAD_REQUEST, false, 2102, "인증번호가 일치하지 않습니다."),
+    FAILED_TO_LOGIN(HttpStatus.BAD_REQUEST, false, 2103, "없는 아이디거나 비밀번호가 틀렸습니다."),
+    NO_LOOKUP_VALUE(HttpStatus.BAD_REQUEST, false, 2104, "조회된 데이터가 없습니다."),
+    WITHDRAWAL_USER(HttpStatus.BAD_REQUEST, false, 2105, "탈퇴한 회원입니다.");
 
 //    NO_EXIST_USER(false, 2104, "존재하지 않는 유저 정보입니다."),
 //    FAILED_TO_CARD_NUMBER(false, 2106, "바코드 생성에 실패했습니다"),
