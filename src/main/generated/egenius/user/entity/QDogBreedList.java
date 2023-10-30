@@ -19,7 +19,9 @@ public class QDogBreedList extends EntityPathBase<DogBreedList> {
 
     public static final QDogBreedList dogBreedList = new QDogBreedList("dogBreedList");
 
-    public final StringPath dogBreedName = createString("dogBreedName");
+    public final StringPath dogBreedEngName = createString("dogBreedEngName");
+
+    public final StringPath dogBreedKorName = createString("dogBreedKorName");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
