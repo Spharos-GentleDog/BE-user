@@ -1,5 +1,6 @@
 package egenius.user.application;
 
+import egenius.global.base.BaseResponseStatus;
 import egenius.global.exception.BaseException;
 import egenius.global.config.security.JwtTokenProvider;
 import egenius.global.util.RedisUtil;
@@ -18,8 +19,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static egenius.global.base.BaseResponseStatus.*;
 
 @Slf4j
 @Service
@@ -45,27 +44,28 @@ public class AuthenticationServiceImple implements AuthenticationService{
      */
 
     @Override
-    public SignUpResponse signUp(SignUpRequestDto signUpRequestDto) {
+    public void signUp(SignUpRequestDto signUpRequestDto) {
         User user = modelMapper.map(signUpRequestDto, User.class);
 
         user.hashPassword(user.getPassword());
         userRepository.save(user);
 
-        return SignUpResponse.builder()
+        SignUpResponse.builder()
                 .loginId(signUpRequestDto.getUserEmail())
                 .build();
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public SignInResponse signIn(SignInRequestDto signInRequestDto) throws BaseException {
+    public SignInResponse signIn(SignInRequestDto signInRequestDto) {
 
-        // 로그인 아이디가 없다면 에러
+        // 로그인 하는 이메일이 없다면 에러
         User user = userRepository.findByUserEmail(signInRequestDto.getUserEmail())
-                .orElseThrow(() -> new BaseException(FAILED_TO_LOGIN));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.FAILED_TO_LOGIN));
 
         // 탈퇴한 회원이면 로그인 불가
         if (user.getDeletedAt() != null) {
-            throw new BaseException(WITHDRAWAL_USER);
+            throw new BaseException(BaseResponseStatus.WITHDRAWAL_USER);
         }
 
         authenticationManager.authenticate(

@@ -1,6 +1,9 @@
 package egenius.user.application;
 
+import egenius.global.base.BaseResponseStatus;
+import egenius.global.exception.BaseException;
 import egenius.global.util.RedisUtil;
+import egenius.user.infrastructure.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class MailServiceImple implements MailService{
 
+    private final UserRepository userRepository;
     private final JavaMailSender mailSender;
     private final RedisUtil redisUtil;
 
@@ -96,17 +100,26 @@ public class MailServiceImple implements MailService{
         mailSender.send(emailForm);
     }
 
+    @Override
+    public void checkEmail(String email) {
+
+        // 이메일이 이미 존재한다면
+        if (!userRepository.existsByUserEmail(email)) {
+            throw new BaseException(BaseResponseStatus.DUPLICATE_EMAIL);
+        }
+
+    }
+
     /**
      * Redis에서 키와 값을 꺼내 봐서 일치하면 true, 그렇지 않으면 false를 반환
+     *
      * @param email
      * @param code
-     * @return
      */
-    public Boolean verifyEmailCode(String email, String code) {
+    public void verifyEmailCode(String email, String code) {
         String codeFoundByEmail = redisUtil.getData(email);
         if (codeFoundByEmail == null) {
-            return false;
+            throw new BaseException(BaseResponseStatus.EXPIRED_AUTH_CODE);
         }
-        return codeFoundByEmail.equals(code);
     }
 }
