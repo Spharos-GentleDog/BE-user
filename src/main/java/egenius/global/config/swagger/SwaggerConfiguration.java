@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 //        bearerFormat = "JWT",
 //        scheme = "bearer"
 //)
-@RequiredArgsConstructor
+
 @Configuration
 public class SwaggerConfiguration {
 

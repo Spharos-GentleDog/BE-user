@@ -4,6 +4,21 @@ spring:
   profiles:
     default: local
 
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${EMAIL}
+    password: ${EMAIL_PW}
+    properties:
+      mail:
+        smtp:
+          auth: true                        # SMTP 서버에 인증 필요한 경우 true로 지정한다. Gmail SMTP 서버는 인증을 요구하기 때문에 true로 설정해야 한다.
+          starttls:                         # SMTP 서버에 TLS를 사용할 것인지 여부를 지정한다. Gmail SMTP 서버는 TLS를 사용해야 하기 때문에 true로 설정해야 한다.
+            enable: true
+
+      auth-code-expiration-millis: 1800000  # 30 * 60 * 1000 == 30분 이메일 인증 코드의 만료 시간(Millisecond)
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
@@ -18,8 +33,6 @@ springdoc:
   default-produces-media-type: application/json
   paths-to-match:
     - /api/v1/**
-    -
-
 #---
 #spring:
 #  profiles:

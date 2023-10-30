@@ -1,10 +1,11 @@
 package egenius.user.application;
 
-import egenius.global.base.BaseException;
+import egenius.user.dto.SignInRequestDto;
 import egenius.user.dto.SignUpRequestDto;
-import egenius.user.response.SignUpResponse;
+import egenius.user.response.SignInResponse;
 
 public interface AuthenticationService {
 
-    SignUpResponse signUp(SignUpRequestDto signUpRequestDto) throws BaseException;
+    void signUp(SignUpRequestDto signUpRequestDto);
+    SignInResponse signIn(SignInRequestDto signInRequestDto);
 }
