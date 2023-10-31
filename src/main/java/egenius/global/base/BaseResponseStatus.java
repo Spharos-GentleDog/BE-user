@@ -37,7 +37,8 @@ public enum BaseResponseStatus {
     MASSAGE_VALID_FAILED(HttpStatus.BAD_REQUEST, false, 2102, "인증번호가 일치하지 않습니다."),
     FAILED_TO_LOGIN(HttpStatus.BAD_REQUEST, false, 2103, "없는 아이디거나 비밀번호가 틀렸습니다."),
     NO_LOOKUP_VALUE(HttpStatus.BAD_REQUEST, false, 2104, "조회된 데이터가 없습니다."),
-    WITHDRAWAL_USER(HttpStatus.BAD_REQUEST, false, 2105, "탈퇴한 회원입니다.");
+    WITHDRAWAL_USER(HttpStatus.BAD_REQUEST, false, 2105, "탈퇴한 회원입니다."),
+    NO_EXIST_USER(HttpStatus.BAD_REQUEST, false, 2106, "존재하지 않는 유저 정보입니다.");
 
 //    NO_EXIST_USER(false, 2104, "존재하지 않는 유저 정보입니다."),
 //    FAILED_TO_CARD_NUMBER(false, 2106, "바코드 생성에 실패했습니다"),

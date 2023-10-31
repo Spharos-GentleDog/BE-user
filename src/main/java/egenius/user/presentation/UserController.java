@@ -1,15 +1,18 @@
 package egenius.user.presentation;
 
-
 import egenius.global.base.BaseResponse;
 import egenius.user.application.AuthenticationService;
+import egenius.user.application.UserService;
 import egenius.user.dto.SignInRequestDto;
 import egenius.user.dto.SignUpRequestDto;
-import egenius.user.response.SignInResponse;
+import egenius.user.response.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     /**
      *
@@ -53,11 +57,25 @@ public class UserController {
 
     @Operation(summary = "유저 정보 조회", description = "유저 정보 조회", tags = { "User Sign" })
     @GetMapping("/info")
-    public BaseResponse<?> getUserInfo() {
+    public BaseResponse<UserInfoResponse> getUserInfo(Principal principal) {
 
+        log.info("principal : {}", principal.getName());
+        UserInfoResponse userInfoResponse = userService.getUserInfo(principal.getName());
 
+        return new BaseResponse<>(userInfoResponse);
+    }
+
+    @Operation(summary = "유저 로그아웃", description = "유저 로그아웃", tags = { "User Sign" })
+    @PostMapping("/signout")
+    public BaseResponse<?> signOut() {
         return new BaseResponse<>();
     }
 
+    @Operation(summary = "리프레쉬 토큰 재발급", description = "access token이 만료 됐다면 실행", tags = { "User Sign" })
+    @PostMapping("/refresh")
+    public BaseResponse<?> refreshToken() {
+        return new BaseResponse<>();
+
+    }
 
 }

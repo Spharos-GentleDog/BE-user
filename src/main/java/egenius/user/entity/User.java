@@ -41,6 +41,10 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.password = new BCryptPasswordEncoder().encode(password);
     }
 
+    public String getName() {
+        return userName;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -70,5 +74,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
 }

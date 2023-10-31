@@ -20,6 +20,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 @Service
 @Transactional
@@ -86,54 +88,59 @@ public class AuthenticationServiceImple implements AuthenticationService{
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .userEmail(user.getUserEmail())
-                .userName(user.getUsername())
+                .userName(user.getName())
                 .build();
     }
 
-//    public SignInResponse refreshToken(String refreshToken) throws BaseException {
-//
-//        final String loginId;
-//        loginId = jwtTokenProvider.getLoginId(refreshToken);
-//
-//        User user = this.userRepository.findByLoginId(loginId)
-//                .orElseThrow();
-//        // refresh 토큰 검증해서 만료 안되었으면
-//
-//        String redisInRefreshToken = (String) redisTemplate.opsForValue().get(loginId); //레디스에서 key loginId로 value refreshToken 가져온다
-//        if(!redisInRefreshToken.equals(refreshToken)){                                  //내가 가진 refreshtoken이랑 레디스 refreshtoken 다르면 예외
-//            throw new BaseException(TokenInvalidException);                             // Redis에서 해당 유저 loginId key 를 삭제하고 재로그인 하도록 클라이언트를 리턴한다
-//        } else {
-//            redisUtil.deleteData(loginId);
-//        }
-//
-//        //내가 가진 refreshtoken이랑 레디스 refreshtoken같으면 레디스 수정
-//        String newAccessToken = jwtTokenProvider.generateToken(user);
-//        String newRefreshToken = jwtTokenProvider.generateRefreshToken(user);
-//
-//        redisTemplate.opsForValue().set(
-//                loginId,
-//                newRefreshToken,
-//                refreshExpirationTime,
-//                TimeUnit.MILLISECONDS
-//        );
-//
-//        return SignInResponse.builder()
-//                .accessToken(newAccessToken)
-//                .refreshToken(newRefreshToken)
-//                .loginId(loginId)
-//                .build();
-//
-//
-//    }
-//
-//
-//    // 로그아웃
-//    @Transactional
-//    public void logout(String email) throws BaseException {
-//        //Token에서 로그인한 사용자 정보 get해 로그아웃 처리
-//        String loginId = jwtTokenProvider.getLoginId(email);
-//        log.info("u is : {}" , loginId);
-//        redisTemplate.delete(loginId); //Token 삭제
-//
-//    }
+    public SignInResponse refreshToken(String refreshToken) throws BaseException {
+
+        final String userEmail;
+        userEmail = jwtTokenProvider.getUserEmail(refreshToken);
+
+        User user = this.userRepository.findByUserEmail(userEmail)
+                .orElseThrow();
+
+        // key userEmain로 value refreshToken 가져온다
+        String redisInRefreshToken = (String) redisTemplate.opsForValue().get(userEmail);
+        // redis에 저장된 refreshToken과 내가 가진 refreshToken이 다르면 에러
+        if (redisInRefreshToken == null) {
+            throw new BaseException(BaseResponseStatus.TokenExpiredException);
+        } else if(!redisInRefreshToken.equals(refreshToken)) {
+            throw new BaseException(BaseResponseStatus.TokenInvalidException);
+        } else {
+            // Redis에서 해당 유저 loginId key 를 삭제하고 재로그인 하도록 클라이언트를 리턴한다
+            redisUtil.deleteData(userEmail);
+        }
+
+        //내가 가진 refreshtoken이랑 레디스 refreshtoken같으면 레디스 수정
+        String newAccessToken = jwtTokenProvider.generateToken(user);
+        String newRefreshToken = jwtTokenProvider.generateRefreshToken(user);
+
+        redisTemplate.opsForValue().set(
+                userEmail,
+                newRefreshToken,
+                refreshExpirationTime,
+                TimeUnit.MILLISECONDS
+        );
+
+        return SignInResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken)
+                .userEmail(userEmail)
+                .userName(user.getUsername())
+                .build();
+
+
+    }
+
+
+    // 로그아웃
+    @Transactional
+    public void logout(String email) throws BaseException {
+        //Token에서 로그인한 사용자 정보 get해 로그아웃 처리
+        String loginId = jwtTokenProvider.getUserEmail(email);
+        log.info("u is : {}" , loginId);
+        redisTemplate.delete(loginId); //Token 삭제
+
+    }
 }

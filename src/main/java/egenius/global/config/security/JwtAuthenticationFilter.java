@@ -56,7 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // userEmail 기반으로 사용자 정보를 가져옵니다.
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             // 토큰이 유효한 경우 인증 정보를 생성하고 Security Context에 설정합니다.
-            try {
                 if (jwtTokenProvider.validateToken(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -70,9 +69,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // 인증 토큰을 Security Context에 설정합니다.
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
-            } catch (BaseException e) {
-                throw new RuntimeException(e);
-            }
         }
         // 다음 필터로 요청과 응답을 전달합니다.
         filterChain.doFilter(request,response);

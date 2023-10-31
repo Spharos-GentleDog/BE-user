@@ -165,9 +165,9 @@ public class JwtTokenProvider {
      * 토큰이 만료되지 않은경우 토큰 유효
      */
     public boolean validateToken(String token, UserDetails userDetails) throws BaseException {
-        final String loginId = getUserEmail(token);
-        //  뽑아온 loginId와 받은 loginId가 같고 유효기간이 지나지 않았다면
-        return (loginId.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String email = getUserEmail(token);
+        //  뽑아온 email과 받은 email가 같고 유효기간이 지나지 않았다면
+        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
 
