@@ -48,6 +48,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
         User user = modelMapper.map(signUpRequestDto, User.class);
 
         user.hashPassword(user.getPassword());
+        log.info("user is : {}" , user);
         userRepository.save(user);
 
         SignUpResponse.builder()

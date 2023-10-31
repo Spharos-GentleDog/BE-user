@@ -6,10 +6,10 @@ import lombok.Getter;
 public class DogRegistrationRequestDto {
 
     private String dogName;
-    private String dogAge;
-    private String dogGender;
-    private String dogBreed;
-    private String dogWeight;
+    private Integer dogAge;
+    private Integer dogGender;
+    private Integer dogBreed;
+    private Integer dogWeight;
     private String furColor;
     private Integer dogBodyLength;
     private Integer dogBreastGirth;

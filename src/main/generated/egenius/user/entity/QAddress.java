@@ -34,7 +34,7 @@ public class QAddress extends EntityPathBase<Address> {
 
     public final StringPath recipientName = createString("recipientName");
 
-    public final StringPath recipientPhoneNumber = createString("recipientPhoneNumber");
+    public final NumberPath<Integer> recipientPhoneNumber = createNumber("recipientPhoneNumber", Integer.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
