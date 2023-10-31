@@ -29,20 +29,30 @@ public class QDog extends EntityPathBase<Dog> {
 
     public final NumberPath<Integer> dogAge = createNumber("dogAge", Integer.class);
 
-    public final StringPath dogBreed = createString("dogBreed");
+    public final NumberPath<Integer> dogBodyLength = createNumber("dogBodyLength", Integer.class);
 
-    public final NumberPath<Integer> dogFurColor = createNumber("dogFurColor", Integer.class);
+    public final NumberPath<Integer> dogBreastGirth = createNumber("dogBreastGirth", Integer.class);
+
+    public final QDogBreed dogBreed;
+
+    public final StringPath dogFurColor = createString("dogFurColor");
+
+    public final NumberPath<Integer> dogGender = createNumber("dogGender", Integer.class);
+
+    public final NumberPath<Integer> dogLegLength = createNumber("dogLegLength", Integer.class);
 
     public final StringPath dogName = createString("dogName");
+
+    public final NumberPath<Integer> dogNeckGirth = createNumber("dogNeckGirth", Integer.class);
 
     public final NumberPath<Integer> dogWeight = createNumber("dogWeight", Integer.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath profileImageUrl = createString("profileImageUrl");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
-
-    public final QUser userid;
 
     public QDog(String variable) {
         this(Dog.class, forVariable(variable), INITS);
@@ -62,7 +72,7 @@ public class QDog extends EntityPathBase<Dog> {
 
     public QDog(Class<? extends Dog> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.userid = inits.isInitialized("userid") ? new QUser(forProperty("userid")) : null;
+        this.dogBreed = inits.isInitialized("dogBreed") ? new QDogBreed(forProperty("dogBreed")) : null;
     }
 
 }

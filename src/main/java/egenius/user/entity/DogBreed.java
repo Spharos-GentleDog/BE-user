@@ -9,13 +9,16 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class DogBreedList {
+public class DogBreed {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "dog_breed_name", length = 20, nullable = false)
-    private String dogBreedName;
+    @Column(name = "dog_breed_kor_name", length = 30, nullable = false)
+    private String dogBreedKorName;
+
+    @Column(name = "dog_breed_eng_name", length = 30, nullable = false)
+    private String dogBreedEngName;
 
 }

@@ -22,18 +22,32 @@ public class Dog extends BaseTimeEntity {
     @Column(name = "dog_age", nullable = false, columnDefinition = "tinyint")
     private Integer dogAge;
 
+    @Column(name = "dog_gender", nullable = false, columnDefinition = "tinyint")
+    private Integer dogGender;
+
     @Column(name = "dog_weight", nullable = false, columnDefinition = "tinyint")
     private Integer dogWeight;
 
-    @Column(name = "dog_fur_color", length = 10, nullable = false)
+    @Column(name = "dog_fur_color", length = 10)
     private String dogFurColor;
+
+    @Column(name = "dog_body_length", columnDefinition = "tinyint")
+    private Integer dogBodyLength;
+
+    @Column(name = "dog_breast_girth", columnDefinition = "tinyint")
+    private Integer dogBreastGirth;
+
+    @Column(name = "dog_neck_girth", columnDefinition = "tinyint")
+    private Integer dogNeckGirth;
+
+    @Column(name = "dog_leg_length", columnDefinition = "tinyint")
+    private Integer dogLegLength;
+
+    @Column(name = "profile_image_url", length = 100)
+    private String profileImageUrl;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dog_bread_id", referencedColumnName = "id")
-    private DogBreedList dogBreedList;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User userId;
+    private DogBreed dogBreed;
 
 }

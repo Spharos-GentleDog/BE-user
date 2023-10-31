@@ -3,7 +3,6 @@ package egenius.user.entity;
 import egenius.global.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 
 @Entity
 @Getter
@@ -23,10 +22,16 @@ public class Address extends BaseTimeEntity {
     @Column(name = "address_name", length = 20, nullable = false)
     private String addressName;
 
+    @Column(name = "recipient_phone_number", length = 15, nullable = false)
+    private String recipientPhoneNumber;
+
+    @Column(name = "recipient_name", length = 20, nullable = false)
+    private String recipientName;
+
+    @Column(name = "address_request_message", length = 100)
+    private String addressRequestMessage;
+
     @Column(name = "entrance_password", length = 20)
     private String entrancePassword;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
 
 }

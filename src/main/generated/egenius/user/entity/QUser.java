@@ -21,8 +21,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final egenius.global.base.QBaseTimeEntity _super = new egenius.global.base.QBaseTimeEntity(this);
 
-    public final NumberPath<Long> address = createNumber("address", Long.class);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
@@ -30,16 +28,20 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath name = createString("name");
-
     public final StringPath password = createString("password");
-
-    public final StringPath phoneNumber = createString("phoneNumber");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
+    public final NumberPath<Integer> userAge = createNumber("userAge", Integer.class);
+
     public final StringPath userEmail = createString("userEmail");
+
+    public final NumberPath<Integer> userGender = createNumber("userGender", Integer.class);
+
+    public final StringPath userName = createString("userName");
+
+    public final StringPath userPhoneNumber = createString("userPhoneNumber");
 
     public QUser(String variable) {
         super(User.class, forVariable(variable));

@@ -51,7 +51,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
         userRepository.save(user);
 
         SignUpResponse.builder()
-                .loginId(signUpRequestDto.getUserEmail())
+                .userEmail(user.getUserEmail())
                 .build();
     }
 
@@ -84,7 +84,8 @@ public class AuthenticationServiceImple implements AuthenticationService{
         return SignInResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .loginId(signInRequestDto.getUserEmail())
+                .userEmail(user.getUserEmail())
+                .userName(user.getUsername())
                 .build();
     }
 
