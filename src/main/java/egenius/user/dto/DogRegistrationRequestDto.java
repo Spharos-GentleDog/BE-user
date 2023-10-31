@@ -11,5 +11,9 @@ public class DogRegistrationRequestDto {
     private String dogBreed;
     private String dogWeight;
     private String furColor;
+    private Integer dogBodyLength;
+    private Integer dogBreastGirth;
+    private Integer dogNeckGirth;
+    private Integer dogLegLength;
 
 }

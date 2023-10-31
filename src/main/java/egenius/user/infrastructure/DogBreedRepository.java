@@ -1,7 +1,9 @@
 package egenius.user.infrastructure;
 
-import egenius.user.entity.DogBreedList;
+
+import egenius.user.entity.DogBreed;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DogBreedRepository extends JpaRepository<DogBreedList, Long> {
+public interface DogBreedRepository extends JpaRepository<DogBreed, Long> {
+
 }

@@ -25,6 +25,4 @@ public class Address extends BaseTimeEntity {
     @Column(name = "entrance_password", length = 20)
     private String entrancePassword;
 
-    private Long userId;
-
 }

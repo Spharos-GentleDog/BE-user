@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class DogBreedList {
+public class AddressList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +20,10 @@ public class DogBreedList {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "dog_breed_id")
-    private DogBreed dogBreed;
+    @JoinColumn(name = "address_id")
+    private Address address;
 
-    @Column(nullable = false, name = "default_dog", columnDefinition = "boolean default false")
-    private Boolean defaultDog;
+    @Column(nullable = false, name = "default_address", columnDefinition = "boolean default false")
+    private Boolean defaultAddress;
 
 }

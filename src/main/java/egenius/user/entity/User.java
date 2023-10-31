@@ -20,7 +20,7 @@ import java.util.List;
 @ToString
 public class User extends BaseTimeEntity implements UserDetails {
 
-    // DDD관점에서는 비즈니스 로직을 엔티티에 작성해도 괜찮음, 고려해볼것
+    // DDD관점에서는 도메인 로직을 엔티티에 작성해도 괜찮음, 고려해볼것
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,19 +30,12 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String password;
     @Column(name = "name", length = 20)
     private String name;
+    @Column(name = "user_age")
+    private Integer userAge;
+    @Column(name = "user_gender", columnDefinition = "tinyint")
+    private Integer userGender;
     @Column(name = "phone_number", length = 15, nullable = false)
     private String phoneNumber;
-
-    /**
-     * CascadeType.Delete : User가 삭제되면 연관된 Entity도 삭제
-     * orphanRemoval = true : User와 연관된 Entity가 없으면 삭제
-     * 둘의 차이는 User가 삭제되면 연관된 Entity도 삭제되는 것은 같지만
-     * orphanRemoval = true는 연관된 Entity가 없으면 삭제되는 것이 다름
-     * 주소지 값을 변경해도 기존 주소지는 삭제하지 않으니 orphanRemoval = true를 사용하지 않음
-     */
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Address favoriteAddress;
-
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 

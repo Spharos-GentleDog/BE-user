@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class SignUpResponse {
 
-    private String loginId;
+    private String userEmail;
 
 }
