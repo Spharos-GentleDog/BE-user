@@ -50,8 +50,4 @@ public class Dog extends BaseTimeEntity {
     @JoinColumn(name = "dog_bread_id", referencedColumnName = "id")
     private DogBreed dogBreed;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User userId;
-
 }

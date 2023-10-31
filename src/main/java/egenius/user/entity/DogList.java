@@ -5,23 +5,23 @@ import lombok.*;
 
 @Entity
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class DogBreedList {
+public class DogList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "dog_breed_id")
-    private DogBreed dogBreed;
+    @JoinColumn(name = "dog_id", referencedColumnName = "id", nullable = false)
+    private Dog dog;
 
     @Column(nullable = false, name = "default_dog", columnDefinition = "boolean default false")
     private Boolean defaultDog;

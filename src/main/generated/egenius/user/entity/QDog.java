@@ -54,8 +54,6 @@ public class QDog extends EntityPathBase<Dog> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public final QUser userId;
-
     public QDog(String variable) {
         this(Dog.class, forVariable(variable), INITS);
     }
@@ -75,7 +73,6 @@ public class QDog extends EntityPathBase<Dog> {
     public QDog(Class<? extends Dog> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.dogBreed = inits.isInitialized("dogBreed") ? new QDogBreed(forProperty("dogBreed")) : null;
-        this.userId = inits.isInitialized("userId") ? new QUser(forProperty("userId")) : null;
     }
 
 }

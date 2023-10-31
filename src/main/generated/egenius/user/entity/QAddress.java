@@ -23,12 +23,18 @@ public class QAddress extends EntityPathBase<Address> {
 
     public final StringPath addressName = createString("addressName");
 
+    public final StringPath addressRequestMessage = createString("addressRequestMessage");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     public final StringPath entrancePassword = createString("entrancePassword");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
+
+    public final StringPath recipientName = createString("recipientName");
+
+    public final StringPath recipientPhoneNumber = createString("recipientPhoneNumber");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;

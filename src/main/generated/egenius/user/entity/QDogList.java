@@ -11,44 +11,44 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QDogBreedList is a Querydsl query type for DogBreedList
+ * QDogList is a Querydsl query type for DogList
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QDogBreedList extends EntityPathBase<DogBreedList> {
+public class QDogList extends EntityPathBase<DogList> {
 
-    private static final long serialVersionUID = 2001979792L;
+    private static final long serialVersionUID = 465905792L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QDogBreedList dogBreedList = new QDogBreedList("dogBreedList");
+    public static final QDogList dogList = new QDogList("dogList");
 
     public final BooleanPath defaultDog = createBoolean("defaultDog");
 
-    public final QDogBreed dogBreed;
+    public final QDog dog;
 
     public final NumberPath<Long> Id = createNumber("Id", Long.class);
 
     public final QUser user;
 
-    public QDogBreedList(String variable) {
-        this(DogBreedList.class, forVariable(variable), INITS);
+    public QDogList(String variable) {
+        this(DogList.class, forVariable(variable), INITS);
     }
 
-    public QDogBreedList(Path<? extends DogBreedList> path) {
+    public QDogList(Path<? extends DogList> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QDogBreedList(PathMetadata metadata) {
+    public QDogList(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QDogBreedList(PathMetadata metadata, PathInits inits) {
-        this(DogBreedList.class, metadata, inits);
+    public QDogList(PathMetadata metadata, PathInits inits) {
+        this(DogList.class, metadata, inits);
     }
 
-    public QDogBreedList(Class<? extends DogBreedList> type, PathMetadata metadata, PathInits inits) {
+    public QDogList(Class<? extends DogList> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.dogBreed = inits.isInitialized("dogBreed") ? new QDogBreed(forProperty("dogBreed")) : null;
+        this.dog = inits.isInitialized("dog") ? new QDog(forProperty("dog"), inits.get("dog")) : null;
         this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
     }
 

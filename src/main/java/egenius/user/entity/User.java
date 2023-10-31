@@ -8,9 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Getter
@@ -20,7 +18,6 @@ import java.util.List;
 @ToString
 public class User extends BaseTimeEntity implements UserDetails {
 
-    // DDD관점에서는 도메인 로직을 엔티티에 작성해도 괜찮음, 고려해볼것
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,14 +25,14 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String userEmail;
     @Column(name = "password", length = 100)
     private String password;
-    @Column(name = "name", length = 20)
-    private String name;
+    @Column(name = "user_name", length = 20)
+    private String userName;
     @Column(name = "user_age")
     private Integer userAge;
     @Column(name = "user_gender", columnDefinition = "tinyint")
     private Integer userGender;
-    @Column(name = "phone_number", length = 15, nullable = false)
-    private String phoneNumber;
+    @Column(name = "user_phone_number", length = 15, nullable = false)
+    private String userPhoneNumber;
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
