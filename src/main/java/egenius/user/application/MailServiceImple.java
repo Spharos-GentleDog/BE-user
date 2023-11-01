@@ -103,7 +103,7 @@ public class MailServiceImple implements MailService{
     public void checkEmail(String email) {
 
         // 이메일이 이미 존재한다면
-        if (!userRepository.existsByUserEmail(email)) {
+        if (userRepository.existsByUserEmail(email)) {
             throw new BaseException(BaseResponseStatus.DUPLICATE_EMAIL);
         }
 

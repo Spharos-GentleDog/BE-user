@@ -8,4 +8,6 @@ public interface AuthenticationService {
 
     void signUp(SignUpRequestDto signUpRequestDto);
     SignInResponse signIn(SignInRequestDto signInRequestDto);
+    void signOut(String accessToken);
+    SignInResponse regenerateToken(String token, String email);
 }

@@ -25,8 +25,8 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return loginId -> (UserDetails) userRepository.findByUserEmail(loginId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found : {}" + loginId));
+        return userEmail -> (UserDetails) userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found : {}" + userEmail));
     }
 
     // 인증 제공자 : 인증을 처리하는데 사용하는 authenticationProvider를 생성한다.

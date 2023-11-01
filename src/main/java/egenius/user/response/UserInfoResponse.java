@@ -1,12 +1,14 @@
-package egenius.user.dto;
+package egenius.user.response;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class SignUpRequestDto {
+@Builder
+public class UserInfoResponse {
 
     private String userEmail;
-    private String password;
     private String usersName;
     private String userPhoneNumber;
     private Integer userAge;

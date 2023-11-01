@@ -2,7 +2,6 @@ package egenius.global.config.security;
 
 import egenius.global.exception.BaseException;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -21,9 +20,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-
-import static egenius.global.base.BaseResponseStatus.TokenExpiredException;
-import static egenius.global.base.BaseResponseStatus.TokenInvalidException;
 
 @Slf4j
 @Service
@@ -72,7 +68,7 @@ public class JwtTokenProvider {
      *
      */
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) throws BaseException {
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
@@ -82,22 +78,14 @@ public class JwtTokenProvider {
      * 주어진 JWT 토큰에서 모든 클레임을 추출하여 반환합니다.
      * 토큰의 서명을 확인하기 위해 사용할 서명 키(getSigningKey())를 설정하고 토큰을 파싱하여 클레임들을 추출합니다.
      */
-    private Claims extractAllClaims(String token) throws BaseException {
-        try {
+    private Claims extractAllClaims(String token) {
+        log.info("extractAllClaims token={}",token);
             return Jwts
                     .parserBuilder()
                     .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token) // 이 단계에서 token의 유효성 검사 및 만료일 검사를 실시한다!
                     .getBody();
-        }
-        // parseClaimsJwt에서 토큰이 잘못된 경우 error를 발생시킨다! -> 발생한 오류는 ExceptionHandlerFilter로 가서 처리된다!
-        catch (ExpiredJwtException e) {
-            log.error("토큰오류 -> " + e);
-            throw new BaseException(TokenExpiredException);
-        } catch (Exception e) {
-            throw new BaseException(TokenInvalidException);
-        }
     }
 
     /**
@@ -140,7 +128,7 @@ public class JwtTokenProvider {
      * Refresh Token 역활
      */
 
-    public String generateRefreshToken(UserDetails userDetails){
+    public String generateRefreshToken(UserDetails userDetails) {
 
         String refreshToken = buildToken(Map.of(), userDetails, refreshExpirationTime);
         // redis에 저장
@@ -164,20 +152,20 @@ public class JwtTokenProvider {
      * 토큰에서 추출한 UUID가 userDetails에서 가져온 사용자 id가 일치하며
      * 토큰이 만료되지 않은경우 토큰 유효
      */
-    public boolean validateToken(String token, UserDetails userDetails) throws BaseException {
-        final String loginId = getUserEmail(token);
-        //  뽑아온 loginId와 받은 loginId가 같고 유효기간이 지나지 않았다면
-        return (loginId.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String email = getUserEmail(token);
+        //  뽑아온 email과 받은 email가 같고 유효기간이 지나지 않았다면
+        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
 
     //  만료 비교
-    private boolean isTokenExpired(String token) throws BaseException {
+    private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new java.util.Date());
     }
 
     //  JWT 토큰에서 만료 시간 클레임을 추출하여 반환합니다.
-    private Date extractExpiration(String token) throws BaseException {
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 

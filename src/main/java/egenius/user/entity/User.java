@@ -25,8 +25,8 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String userEmail;
     @Column(name = "password", length = 100)
     private String password;
-    @Column(name = "user_name", length = 20)
-    private String userName;
+    @Column(name = "users_name", length = 20)
+    private String usersName;
     @Column(name = "user_age")
     private Integer userAge;
     @Column(name = "user_gender", columnDefinition = "tinyint")
@@ -70,5 +70,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 
 }

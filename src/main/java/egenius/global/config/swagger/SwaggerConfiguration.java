@@ -1,36 +1,38 @@
 package egenius.global.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import lombok.RequiredArgsConstructor;
-import org.springdoc.core.models.GroupedOpenApi;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @io.swagger.v3.oas.annotations.info.Info(
-                title = "Point App API",
+                title = "GentleDog Swagger API",
                 version = "v1",
-                description = "GentleDog App API Docs"
+                description = "젠틀독 Swagger API 문서 입니다."
         )
 )
-//@SecurityScheme(
-//        name = "Bearer Auth",
-//        type = SecuritySchemeType.HTTP,
-//        bearerFormat = "JWT",
-//        scheme = "bearer"
-//)
 
 @Configuration
 public class SwaggerConfiguration {
 
     @Bean
-    public GroupedOpenApi publicApi() {
+    public OpenAPI customizeOpenAPI() {
+        return new OpenAPI()
+                // addSecurityItem란 security를 적용할 api를 설정하는 것이다.
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                // components란 security에 필요한 정보를 설정하는 것이다.
+                .components(new Components()
+                        // addSecuritySchemes란 security에 필요한 정보를 설정하는 것이다.
+                        .addSecuritySchemes("bearerAuth",
+                                new SecurityScheme()
+                                        .name("bearerAuth")
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")));
 
-        String[] paths = {"/api/v1/**"};
-
-        return GroupedOpenApi.builder()
-                .group("public-api")
-                .pathsToMatch(paths)
-                .build();
     }
 }
