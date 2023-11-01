@@ -23,7 +23,7 @@ public class Address extends BaseTimeEntity {
     private String addressName;
 
     @Column(name = "recipient_phone_number", length = 15, nullable = false)
-    private Integer recipientPhoneNumber;
+    private String recipientPhoneNumber;
 
     @Column(name = "recipient_name", length = 20, nullable = false)
     private String recipientName;

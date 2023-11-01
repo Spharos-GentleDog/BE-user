@@ -45,12 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         jwt = authHeader.substring(7); // "Bearer " 제외
-        // JWT 토큰에서 사용자 loginId를 가져옵니다.
-        try {
-            userEmail = jwtTokenProvider.getUserEmail(jwt);
-        } catch (BaseException e) {
-            throw new RuntimeException(e);
-        }
+        // JWT 토큰에서 사용자 email을 가져옵니다.
+        userEmail = jwtTokenProvider.getUserEmail(jwt);
         // 유효성 검사
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             // userEmail 기반으로 사용자 정보를 가져옵니다.

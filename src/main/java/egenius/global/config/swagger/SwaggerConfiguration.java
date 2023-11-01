@@ -22,8 +22,11 @@ public class SwaggerConfiguration {
     @Bean
     public OpenAPI customizeOpenAPI() {
         return new OpenAPI()
+                // addSecurityItem란 security를 적용할 api를 설정하는 것이다.
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                // components란 security에 필요한 정보를 설정하는 것이다.
                 .components(new Components()
+                        // addSecuritySchemes란 security에 필요한 정보를 설정하는 것이다.
                         .addSecuritySchemes("bearerAuth",
                                 new SecurityScheme()
                                         .name("bearerAuth")

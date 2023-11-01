@@ -22,9 +22,10 @@ public class UserServiceImple implements UserService{
     public UserInfoResponse getUserInfo(String email) {
         User user = userRepository.findByUserEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+        log.info("user is : {}", user);
         return UserInfoResponse.builder()
                 .userEmail(user.getUserEmail())
-                .userName(user.getName())
+                .usersName(user.getUsersName())
                 .userPhoneNumber(user.getUserPhoneNumber())
                 .userAge(user.getUserAge())
                 .userGender(user.getUserGender())

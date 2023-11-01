@@ -88,59 +88,65 @@ public class AuthenticationServiceImple implements AuthenticationService{
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .userEmail(user.getUserEmail())
-                .userName(user.getName())
+                .usersName(user.getUsersName())
                 .build();
     }
 
-    public SignInResponse refreshToken(String refreshToken) throws BaseException {
+    public SignInResponse regenerateToken(String token, String email) {
 
-        final String userEmail;
-        userEmail = jwtTokenProvider.getUserEmail(refreshToken);
 
-        User user = this.userRepository.findByUserEmail(userEmail)
-                .orElseThrow();
+        String refreshToken = token.substring(7);
+
+        User user = userRepository.findByUserEmail(email)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+
+        log.info("refreshToken is : {}" , refreshToken);
+
+        log.info("user : {}" , user);
+        log.info("user is : {}" , user.getUsersName());
 
         // key userEmain로 value refreshToken 가져온다
-        String redisInRefreshToken = (String) redisTemplate.opsForValue().get(userEmail);
-        // redis에 저장된 refreshToken과 내가 가진 refreshToken이 다르면 에러
+        String redisInRefreshToken = (String) redisTemplate.opsForValue().get(email);
+        // redis에 저장된 refreshToken과 일치하는지 확인한다
         if (redisInRefreshToken == null) {
+            // redis에 저장된 refreshToken이 없다면 만료된 토큰이거나 잘못된 토큰이다
             throw new BaseException(BaseResponseStatus.TokenExpiredException);
         } else if(!redisInRefreshToken.equals(refreshToken)) {
+            // redis에 저장된 refreshToken과 일치하지 않는다면 잘못된 토큰이다
             throw new BaseException(BaseResponseStatus.TokenInvalidException);
         } else {
             // Redis에서 해당 유저 loginId key 를 삭제하고 재로그인 하도록 클라이언트를 리턴한다
-            redisUtil.deleteData(userEmail);
+            redisUtil.deleteData(email);
         }
+
+
 
         //내가 가진 refreshtoken이랑 레디스 refreshtoken같으면 레디스 수정
         String newAccessToken = jwtTokenProvider.generateToken(user);
         String newRefreshToken = jwtTokenProvider.generateRefreshToken(user);
 
         redisTemplate.opsForValue().set(
-                userEmail,
+                email,
                 newRefreshToken,
                 refreshExpirationTime,
                 TimeUnit.MILLISECONDS
         );
 
+
+
         return SignInResponse.builder()
                 .accessToken(newAccessToken)
                 .refreshToken(newRefreshToken)
-                .userEmail(userEmail)
-                .userName(user.getUsername())
+                .userEmail(email)
+                .usersName(user.getUsersName())
                 .build();
-
 
     }
 
-
     // 로그아웃
-    @Transactional
-    public void logout(String email) throws BaseException {
-        //Token에서 로그인한 사용자 정보 get해 로그아웃 처리
-        String loginId = jwtTokenProvider.getUserEmail(email);
-        log.info("u is : {}" , loginId);
-        redisTemplate.delete(loginId); //Token 삭제
+    public void signOut(String email) {
+        log.info("email is : {}" , email);
+        redisTemplate.delete(email); //Token 삭제
 
     }
 }

@@ -8,6 +8,7 @@ import egenius.user.dto.SignUpRequestDto;
 import egenius.user.response.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +59,7 @@ public class UserController {
     @Operation(summary = "유저 정보 조회", description = "유저 정보 조회", tags = { "User Sign" })
     @GetMapping("/info")
     public BaseResponse<UserInfoResponse> getUserInfo(Principal principal) {
-
+        // 토큰값에서 loginId 추출
         log.info("principal : {}", principal.getName());
         UserInfoResponse userInfoResponse = userService.getUserInfo(principal.getName());
 
@@ -67,14 +68,21 @@ public class UserController {
 
     @Operation(summary = "유저 로그아웃", description = "유저 로그아웃", tags = { "User Sign" })
     @PostMapping("/signout")
-    public BaseResponse<?> signOut() {
+    public BaseResponse<?> signOut(Principal principal) {
+        log.info("principal : {}", principal.getName());
+        authenticationService.signOut(principal.getName());
         return new BaseResponse<>();
     }
 
-    @Operation(summary = "리프레쉬 토큰 재발급", description = "access token이 만료 됐다면 실행", tags = { "User Sign" })
+    @Operation(summary = "토큰 재발급", description = "access token이 만료 됐다면 실행", tags = { "User Sign" })
     @PostMapping("/refresh")
-    public BaseResponse<?> refreshToken() {
-        return new BaseResponse<>();
+    public BaseResponse<SignInResponse> regenerateToken(HttpServletRequest request,
+                                                        Principal principal) {
+
+        String token = request.getHeader("Authorization");
+        SignInResponse signInResponse = authenticationService.regenerateToken(token, principal.getName());
+
+        return new BaseResponse<>(signInResponse);
 
     }
 

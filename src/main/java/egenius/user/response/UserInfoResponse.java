@@ -9,7 +9,7 @@ import lombok.Getter;
 public class UserInfoResponse {
 
     private String userEmail;
-    private String userName;
+    private String usersName;
     private String userPhoneNumber;
     private Integer userAge;
     private Integer userGender;
