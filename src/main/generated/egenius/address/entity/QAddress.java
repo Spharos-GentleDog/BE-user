@@ -1,4 +1,4 @@
-package egenius.user.entity;
+package egenius.address.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QAddress extends EntityPathBase<Address> {
 
-    private static final long serialVersionUID = 1781799034L;
+    private static final long serialVersionUID = 733473813L;
 
     public static final QAddress address = new QAddress("address");
 
@@ -34,7 +34,7 @@ public class QAddress extends EntityPathBase<Address> {
 
     public final StringPath recipientName = createString("recipientName");
 
-    public final NumberPath<Integer> recipientPhoneNumber = createNumber("recipientPhoneNumber", Integer.class);
+    public final StringPath recipientPhoneNumber = createString("recipientPhoneNumber");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;

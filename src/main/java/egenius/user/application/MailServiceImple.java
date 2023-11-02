@@ -3,6 +3,7 @@ package egenius.user.application;
 import egenius.global.base.BaseResponseStatus;
 import egenius.global.exception.BaseException;
 import egenius.global.util.RedisUtil;
+import egenius.user.entity.User;
 import egenius.user.infrastructure.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -91,22 +92,18 @@ public class MailServiceImple implements MailService{
      * @param email
      */
     public void sendEmailAuthentication(String email) throws MessagingException {
+
+        // 이메일이 존재한다면 이미 가입된 유저
+        if (userRepository.existsByUserEmail(email)) {
+            throw new BaseException(BaseResponseStatus.DUPLICATE_EMAIL);
+        }
+
         if (redisUtil.existData(email)) {
             redisUtil.deleteData(email);
         }
 
         MimeMessage emailForm = createEmailForm(email);
         mailSender.send(emailForm);
-    }
-
-    @Override
-    public void checkEmail(String email) {
-
-        // 이메일이 이미 존재한다면
-        if (userRepository.existsByUserEmail(email)) {
-            throw new BaseException(BaseResponseStatus.DUPLICATE_EMAIL);
-        }
-
     }
 
     /**

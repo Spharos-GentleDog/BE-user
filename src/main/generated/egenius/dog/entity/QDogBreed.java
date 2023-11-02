@@ -1,4 +1,4 @@
-package egenius.user.entity;
+package egenius.dog.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QDogBreed extends EntityPathBase<DogBreed> {
 
-    private static final long serialVersionUID = 1549196754L;
+    private static final long serialVersionUID = 348069343L;
 
     public static final QDogBreed dogBreed = new QDogBreed("dogBreed");
 

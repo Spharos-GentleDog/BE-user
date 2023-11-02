@@ -1,6 +1,6 @@
-package egenius.user.infrastructure;
+package egenius.address.infrastructure;
 
-import egenius.user.entity.Address;
+import egenius.address.entity.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AddressRepository extends JpaRepository<Address, Long> {
