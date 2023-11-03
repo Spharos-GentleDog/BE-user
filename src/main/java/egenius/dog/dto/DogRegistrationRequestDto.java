@@ -1,4 +1,4 @@
-package egenius.user.dto;
+package egenius.dog.dto;
 
 import lombok.Getter;
 

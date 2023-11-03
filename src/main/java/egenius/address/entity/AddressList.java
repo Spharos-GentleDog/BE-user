@@ -1,5 +1,6 @@
-package egenius.user.entity;
+package egenius.address.entity;
 
+import egenius.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,11 +16,11 @@ public class AddressList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false)
     private Address address;
 

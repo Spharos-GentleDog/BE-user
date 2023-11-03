@@ -1,4 +1,4 @@
-package egenius.user.entity;
+package egenius.address.entity;
 
 import egenius.global.base.BaseTimeEntity;
 import jakarta.persistence.*;

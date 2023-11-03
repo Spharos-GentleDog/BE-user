@@ -36,9 +36,36 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
+    /**
+     * 도메인 로직
+     * 1. 비밀번호 암호화
+     * 2. 회원정보 수정 : userEmail, usersName, userPhoneNumber, userAge, userGender 변경
+     * 3. 유저 탈퇴: deletedAt 변경
+     *
+     */
+
+    // 1. 비밀번호 암호화
     public void hashPassword(String password) {
-        //      this.password = password;
         this.password = new BCryptPasswordEncoder().encode(password);
+    }
+
+    // 2. 회원 정보 수정
+    public void updateUserInfo(String userEmail,
+                               String usersName,
+                               String userPhoneNumber,
+                               Integer userAge,
+                               Integer userGender) {
+
+        this.userEmail = userEmail;
+        this.usersName = usersName;
+        this.userPhoneNumber = userPhoneNumber;
+        this.userAge = userAge;
+        this.userGender = userGender;
+    }
+
+    // 3. 유저 탈퇴
+    public void deactivateUser() {
+        this.deletedAt = LocalDateTime.now();
     }
 
     @Override

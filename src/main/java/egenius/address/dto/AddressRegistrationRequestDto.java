@@ -1,4 +1,4 @@
-package egenius.user.dto;
+package egenius.address.dto;
 
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
-package egenius.user.presentation;
+package egenius.address.presentation;
 
 import egenius.global.base.BaseResponse;
-import egenius.user.dto.DogRegistrationRequestDto;
+import egenius.address.dto.AddressRegistrationRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,16 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/user/address")
 @Slf4j
 @RequiredArgsConstructor
-public class DogController {
+public class AddressController {
 
-    @Operation(summary = "반려견 등록", description = "반려견 등록", tags = { "Pet Dog" })
-    @PostMapping("/petdog")
-    public BaseResponse<?> dogRegister(@RequestBody DogRegistrationRequestDto dogRegisterRequestDto) {
+    @Operation(summary = "배송지 등록", description = "배송지 등록", tags = { "User Address" })
+    @PostMapping("")
+    public BaseResponse<?> addressRegister(@RequestBody AddressRegistrationRequestDto addressRegistrationRequestDto) {
 
         return new BaseResponse<>();
     }
-
 }
