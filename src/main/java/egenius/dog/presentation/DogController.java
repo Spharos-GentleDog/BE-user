@@ -30,7 +30,7 @@ public class DogController {
     }
 
     @Operation(summary = "반려견 정보 수정", description = "반려견 정보 수정", tags = { "User Dog" })
-    @PostMapping("")
+    @PutMapping("")
     public BaseResponse<?> dogUpdate(@RequestBody DogRegistrationRequestDto dogRegisterRequestDto) {
 
         return new BaseResponse<>();
