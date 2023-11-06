@@ -1,11 +1,18 @@
-package egenius.dog.dto;
+package egenius.dog.response;
 
 import egenius.dog.entity.DogBreed;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
-public class DogRegistrationRequestDto {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class DogInfoResponse {
 
+    private Long id;
     private String dogName;
     private Integer dogAge;
     private Integer dogGender;
@@ -16,6 +23,6 @@ public class DogRegistrationRequestDto {
     private Integer dogBreastGirth;
     private Integer dogNeckGirth;
     private Integer dogLegLength;
-    private Long dogBreed;
+    private DogBreed dogBreed;
 
 }

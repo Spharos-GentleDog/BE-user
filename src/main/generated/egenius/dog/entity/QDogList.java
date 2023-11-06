@@ -22,11 +22,19 @@ public class QDogList extends EntityPathBase<DogList> {
 
     public static final QDogList dogList = new QDogList("dogList");
 
+    public final egenius.global.base.QBaseTimeEntity _super = new egenius.global.base.QBaseTimeEntity(this);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
     public final BooleanPath defaultDog = createBoolean("defaultDog");
 
     public final QDog dog;
 
     public final NumberPath<Long> Id = createNumber("Id", Long.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public final egenius.user.entity.QUser user;
 

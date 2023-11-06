@@ -42,7 +42,10 @@ public enum BaseResponseStatus {
     USER_STATUS_IS_NOT_FOUND(HttpStatus.BAD_REQUEST, false, 2107, "존재하지 않는 유저 상태입니다."),
     PASSWORD_SAME_FAILED(HttpStatus.BAD_REQUEST, false, 2108, "현재 사용중인 비밀번호 입니다."),
     PASSWORD_CONTAIN_NUM_FAILED(HttpStatus.BAD_REQUEST, false, 2109, "휴대폰 번호를 포함한 비밀번호 입니다."),
-    PASSWORD_UPDATE_FAILED(HttpStatus.BAD_REQUEST, false, 2110, "비밀번호 변경에 실패했습니다.");
+    PASSWORD_UPDATE_FAILED(HttpStatus.BAD_REQUEST, false, 2110, "비밀번호 변경에 실패했습니다."),
+
+    // Dog
+    NO_EXIST_DOG_BREED(HttpStatus.BAD_REQUEST, false, 2200, "존재하지 않는 품종입니다.");
 
 //    NO_EXIST_USER(false, 2104, "존재하지 않는 유저 정보입니다."),
 //    FAILED_TO_CARD_NUMBER(false, 2106, "바코드 생성에 실패했습니다"),
