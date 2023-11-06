@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     // 추후 게이트웨이로 옮길 예정
-    private final JwtAuthenticationFilter jwtTokenProvider;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
@@ -41,7 +41,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(
                         authorizeHttpRequests -> authorizeHttpRequests
                                 // 허용 범위
-                                .requestMatchers("/api/v1/**", "/swagger-ui/**", "/swagger-resources/**", "/api-docs/**")
+                                .requestMatchers(
+                                        "/api/v1/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-resources/**",
+                                        "/api-docs/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated()
@@ -52,7 +56,7 @@ public class SecurityConfiguration {
                 ) // 세션을 생성하지 않음. JWT 인증이기 때문에 상태가 없는(stateless) 세션 정책을 사용
                 .authenticationProvider(authenticationProvider) // 커스텀 인증을 사용
                 // JWT 인증 필터를 UsernamePasswordAuthenticationFilter 전에 추가
-                .addFilterBefore(jwtTokenProvider, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

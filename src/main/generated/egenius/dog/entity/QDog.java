@@ -39,6 +39,8 @@ public class QDog extends EntityPathBase<Dog> {
 
     public final NumberPath<Integer> dogGender = createNumber("dogGender", Integer.class);
 
+    public final StringPath dogImageUrl = createString("dogImageUrl");
+
     public final NumberPath<Integer> dogLegLength = createNumber("dogLegLength", Integer.class);
 
     public final StringPath dogName = createString("dogName");
@@ -48,8 +50,6 @@ public class QDog extends EntityPathBase<Dog> {
     public final NumberPath<Integer> dogWeight = createNumber("dogWeight", Integer.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
-
-    public final StringPath profileImageUrl = createString("profileImageUrl");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;

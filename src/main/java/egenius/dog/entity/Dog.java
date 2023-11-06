@@ -1,5 +1,6 @@
 package egenius.dog.entity;
 
+import egenius.dog.dto.DogRegistrationRequestDto;
 import egenius.global.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,6 +29,9 @@ public class Dog extends BaseTimeEntity {
     @Column(name = "dog_weight", nullable = false, columnDefinition = "tinyint")
     private Integer dogWeight;
 
+    @Column(name = "dog_image_url", length = 100)
+    private String dogImageUrl;
+
     @Column(name = "dog_fur_color", length = 10)
     private String dogFurColor;
 
@@ -43,11 +47,26 @@ public class Dog extends BaseTimeEntity {
     @Column(name = "dog_leg_length", columnDefinition = "tinyint")
     private Integer dogLegLength;
 
-    @Column(name = "profile_image_url", length = 100)
-    private String profileImageUrl;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dog_bread_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "dog_bread_id", referencedColumnName = "id", nullable = false)
     private DogBreed dogBreed;
 
+    // 1. 강아지 정보 수정
+    public void updateDog(DogRegistrationRequestDto dogRegistrationRequestDto){
+        this.dogAge = dogRegistrationRequestDto.getDogAge();
+        this.dogBodyLength = dogRegistrationRequestDto.getDogBodyLength();
+        this.dogBreastGirth = dogRegistrationRequestDto.getDogBreastGirth();
+        this.dogFurColor = dogRegistrationRequestDto.getDogFurColor();
+        this.dogGender = dogRegistrationRequestDto.getDogGender();
+        this.dogImageUrl = dogRegistrationRequestDto.getDogImageUrl();
+        this.dogLegLength = dogRegistrationRequestDto.getDogLegLength();
+        this.dogName = dogRegistrationRequestDto.getDogName();
+        this.dogNeckGirth = dogRegistrationRequestDto.getDogNeckGirth();
+        this.dogWeight = dogRegistrationRequestDto.getDogWeight();
+
+    }
+
+    public void setDogBreed(DogBreed dogBreed) {
+        this.dogBreed = dogBreed;
+    }
 }
