@@ -33,3 +33,11 @@ springdoc:
   default-produces-media-type: application/json
   paths-to-match:
     - /api/v1/**
+---
+spring:
+  profiles:
+    active: prod
+---
+#spring:
+#  profiles:
+#    active: local
