@@ -7,7 +7,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @Configuration
-public class WebMvcConfig implements WebMvcConfigurer {
+//@EnableWebMvc // 여기에는 필요없음 -> 웹 요청 및 응답을 처리하는데 필요 ex) 컨트롤러, 뷰 리졸버, 핸들러 매핑, 인터셉터 등을 활성화 함
+public class CorsConfig implements WebMvcConfigurer {
     // CORS 설정
     @Override
     public void addCorsMappings(CorsRegistry registry) {

@@ -3,6 +3,7 @@ package egenius.global.config.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,19 +38,35 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                // Restful API를 사용하므로, csrf는 사용할 필요가 없다
                 .csrf(CsrfConfigurer::disable)
+                // cors는 사용할것이므로 CorsConfig만 @Configuration 등록하고 따로 설정해주지는 않음
+                // 인증 절차에 대한 설정을 시작 : 필터를 적용시키지 않을 url과, 적용시킬 url을 구분
                 .authorizeHttpRequests(
+
                         authorizeHttpRequests -> authorizeHttpRequests
-                                // 허용 범위
+                                .requestMatchers(org.springframework.web.cors.CorsUtils::isPreFlightRequest)
+                                .permitAll()
+                                // RESTful 하게 구분되는 경우 -> HttpMethod 까지 적어줘야한다
+//                                .requestMatchers(
+//                                        HttpMethod.GET, "/api/v1/franchise")
+//                                .permitAll() // 모든 가맹점 정보 조회
+                                // url이 특정지어지는 경우 -> HttpMethod를 적어줄 필요가 없다
                                 .requestMatchers(
                                         "/api/v1/**",
                                         "/swagger-ui/**",
                                         "/swagger-resources/**",
-                                        "/api-docs/**")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
+                                        "/api-docs/**",
+                                        "/api/v1/user/signup/**",               // 회원가입
+                                        "/api/v1/user/signin/**",               // 로그인
+                                        "/api/v1/user/refresh"                  // 토큰 재발급
+                                )
+                                .permitAll() // 위의 url은 모두 filter를 거치지 않음
+                                .anyRequest().authenticated() // 위의 url을 제외한 모든 url은 필터를 거쳐야함
                 )
+                // 폼 로그인 사용 안함
+                .formLogin(formLogin -> formLogin.disable())
+                // 토큰 방식을 사용하므로, 서버에서 session을 관리하지 않음. 따라서 STATELESS로 설정
                 .sessionManagement(
                         sessionManagement -> sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
