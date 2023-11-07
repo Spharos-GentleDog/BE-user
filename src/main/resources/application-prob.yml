@@ -37,7 +37,7 @@ spring:
   # Redis 설정
   data:
     redis:
-      host: localhost
+      host: 52.78.206.119
       port: ${REDIS_PORT}
     web:
       pageable:
