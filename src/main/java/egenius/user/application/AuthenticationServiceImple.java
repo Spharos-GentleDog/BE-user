@@ -52,12 +52,6 @@ public class AuthenticationServiceImple implements AuthenticationService{
     public void signUp(SignUpRequestDto signUpRequestDto) {
         User user = modelMapper.map(signUpRequestDto, User.class);
 
-        // 주소 엔티티에 주소만 넣어서 저장
-        Address address  = Address.builder()
-                .userAddress(signUpRequestDto.getUserAddress())
-                .build();
-        addressRepository.save(address);
-
         user.hashPassword(user.getPassword());
         log.info("user is : {}" , user);
         userRepository.save(user);

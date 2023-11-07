@@ -66,6 +66,8 @@ public class Dog extends BaseTimeEntity {
 
     }
 
+
+    // 2. 강아지 품종 저장
     public void setDogBreed(DogBreed dogBreed) {
         this.dogBreed = dogBreed;
     }

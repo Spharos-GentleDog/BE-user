@@ -9,6 +9,7 @@ public interface DogListRepository extends JpaRepository<DogList, Long> {
 
     List<DogList> findByUserId(Long userId);
     DogList findByUserIdAndDogId(Long userId, Long dogId);
-    Boolean existsByUserId(Long userId);
+    DogList findByUserIdAndDefaultDog(Long userId, Boolean defaultDog);
     DogList findByDogId(Long dogId);
+
 }

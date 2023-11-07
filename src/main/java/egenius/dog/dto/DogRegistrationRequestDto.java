@@ -16,6 +16,7 @@ public class DogRegistrationRequestDto {
     private Integer dogBreastGirth;
     private Integer dogNeckGirth;
     private Integer dogLegLength;
+    private Boolean defaultDog;
     private Long dogBreed;
 
 }

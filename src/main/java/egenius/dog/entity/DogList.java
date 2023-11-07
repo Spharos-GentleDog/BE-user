@@ -28,8 +28,4 @@ public class DogList extends BaseTimeEntity {
     @Column(name = "default_dog", columnDefinition = "boolean default false", nullable = false)
     private Boolean defaultDog;
 
-    // 1. 유저의 기본 강아지 설정
-    public void updateDefaultDog(Boolean defaultDog) {
-        this.defaultDog = defaultDog;
-    }
 }
