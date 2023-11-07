@@ -21,6 +21,7 @@ public class DogInfoResponse {
     private Integer dogBreastGirth;
     private Integer dogNeckGirth;
     private Integer dogLegLength;
+    private Boolean defaultDog;
     private String dogBreedKorName;
 
 }
