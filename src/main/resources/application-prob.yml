@@ -14,7 +14,7 @@ spring:
 
   # Replication 설정
   datasource:
-    jdbc-url: ${MASTER_DB_URL}
+    url: ${MASTER_DB_URL}
     username: ${MASTER_DB_USERNAME}
     password: ${MASTER_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
