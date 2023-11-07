@@ -110,10 +110,20 @@ public class DogServiceImple implements DogService {
 
         List<DogList> dogList = dogListRepository.findByUserId(user.getId());
 
-        // ModelMapper와 스트림을 사용하여 DogList 엔터티를 DogInfoResponse로 매핑하고 리스트로 반환
+        // DogList 엔터티 리스트를 스트림으로 변환
         return dogList.stream()
-                .map(dogListEntry -> modelMapper.map(dogListEntry.getDog(), DogInfoResponse.class))
+                .map(dogList1 -> {
+                    Dog myDog = dogList1.getDog(); // DogList 엔터티에서 Dog 객체를 가져옴
+                    // dogInfoResponse값 넣어줌
+                    DogInfoResponse dogInfoResponse = modelMapper.map(myDog, DogInfoResponse.class);
+                    // dogbreedname값 넣어줌
+                    dogInfoResponse = dogInfoResponse.toBuilder()
+                            .dogBreedKorName(myDog.getDogBreed().getDogBreedKorName())
+                            .build();
+                    return dogInfoResponse;
+                })
                 .toList();
+
     }
 
     /**
@@ -162,7 +172,20 @@ public class DogServiceImple implements DogService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
 
         DogList dogList = dogListRepository.findByUserIdAndDogId(user.getId(), dogListId);
-        dogListRepository.delete(dogList);
+        // 삭제한 반려견이 기본 반려견이라면 다음 반려견을 기본 반려견으로 변경
+        if (dogList.getDefaultDog()) {
+            DogList nextDogList = dogListRepository.findByUserId(user.getId())
+                    .stream() // DogList 엔터티 리스트를 스트림으로 변환
+                    .filter(dogList1 -> !dogList1.getId().equals(dogListId)) // 기본 반려견이 아닌 반려견을 필터링
+                    .findFirst()
+                    .orElse(null); // 첫번째 반려견을 가져옴 없다면 null
 
+            // 첫번째 반려견이 있다면 true로 변경
+            if (nextDogList != null)
+                // 첫번째 반려견을 기본 반려견으로 변경
+                nextDogList.updateDefaultDog(true);
+        }
+
+        dogListRepository.delete(dogList);
     }
 }

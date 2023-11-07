@@ -41,6 +41,7 @@ public class DogController {
     @GetMapping("")
     public BaseResponse<List<DogInfoResponse>> dogInfo(Principal principal) {
         List<DogInfoResponse> dogInfoResponse = dogService.getDogInfo(principal.getName());
+        log.info("dogInfoResponse : " + dogInfoResponse);
         return new BaseResponse<>(dogInfoResponse);
     }
 
