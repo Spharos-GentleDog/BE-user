@@ -79,6 +79,8 @@ public class AuthenticationServiceImple implements AuthenticationService{
         if (user.getDeletedAt() != null) {
             throw new BaseException(BaseResponseStatus.WITHDRAWAL_USER);
         }
+        log.info("signInRequestDto is : {}" , signInRequestDto.getPassword());
+        log.info("user is : {}" , user.getPassword());
 
         // 회원정보 일치하지 않으면 에러
         authenticationManager.authenticate(

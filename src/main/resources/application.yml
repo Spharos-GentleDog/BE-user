@@ -2,7 +2,7 @@ spring:
   application:
     name: user
   profiles:
-    default: prod
+    default: local
 
 
   mail:

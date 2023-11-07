@@ -109,7 +109,6 @@ public class DogServiceImple implements DogService {
 
 
         List<DogList> dogList = dogListRepository.findByUserId(user.getId());
-
         // DogList 엔터티 리스트를 스트림으로 변환
         return dogList.stream()
                 .map(dogList1 -> {
@@ -119,6 +118,7 @@ public class DogServiceImple implements DogService {
                     // dogbreedname값 넣어줌
                     dogInfoResponse = dogInfoResponse.toBuilder()
                             .dogBreedKorName(myDog.getDogBreed().getDogBreedKorName())
+                            .defaultDog(dogList1.getDefaultDog())
                             .build();
                     return dogInfoResponse;
                 })
