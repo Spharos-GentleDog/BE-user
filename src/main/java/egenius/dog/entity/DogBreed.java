@@ -21,4 +21,7 @@ public class DogBreed {
     @Column(name = "dog_breed_eng_name", length = 30, nullable = false)
     private String dogBreedEngName;
 
+    public String getDogBreedName() {
+        return this.dogBreedKorName;
+    }
 }
