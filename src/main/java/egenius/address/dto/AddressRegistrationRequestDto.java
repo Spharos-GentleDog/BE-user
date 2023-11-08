@@ -11,5 +11,6 @@ public class AddressRegistrationRequestDto {
     private String recipientName;
     private String addressRequestMessage;
     private String entrancePassword;
+    private Boolean defaultAddress;
 
 }

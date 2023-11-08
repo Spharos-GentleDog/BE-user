@@ -11,6 +11,5 @@ public class SignUpRequestDto {
     private String userPhoneNumber;
     private Integer userAge;
     private Integer userGender;
-    private String userAddress;
 
 }
