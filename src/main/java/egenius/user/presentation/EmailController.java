@@ -19,7 +19,7 @@ public class EmailController {
     private final MailService mailService;
 
     @Operation(summary = "메일인증 요청", description = "메일인증 요청", tags = { "User Sign" })
-    @PostMapping("/signup/email-auth")
+    @GetMapping("/signup/email-auth")
     public BaseResponse<?> sendEmailAuthentication(@RequestParam("email") String email) throws MessagingException {
         mailService.sendEmailAuthentication(email);
         return new BaseResponse<>();
