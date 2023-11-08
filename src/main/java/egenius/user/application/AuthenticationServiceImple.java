@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 public class AuthenticationServiceImple implements AuthenticationService{
 
     private final UserRepository userRepository;
-    private final AddressRepository addressRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;

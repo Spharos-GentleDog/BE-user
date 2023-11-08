@@ -57,19 +57,18 @@ public class UserController {
 
     @Operation(summary = "유저 정보 조회", description = "유저 정보 조회", tags = { "User Sign" })
     @GetMapping("/info")
-    public BaseResponse<UserInfoResponse> getUserInfo(Principal principal) {
+    public BaseResponse<UserInfoResponse> getUserInfo(@RequestHeader("email") String userEmail) {
         // 토큰값에서 loginId 추출
-        log.info("principal : {}", principal.getName());
-        UserInfoResponse userInfoResponse = userService.getUserInfo(principal.getName());
+        UserInfoResponse userInfoResponse = userService.getUserInfo(userEmail);
         return new BaseResponse<>(userInfoResponse);
     }
 
     @Operation(summary = "유저 정보 수정", description = "유저 정보 수정", tags = { "User Sign" })
     @PutMapping("/info")
-    public BaseResponse<?> updateUserInfo(Principal principal,
+    public BaseResponse<?> updateUserInfo(@RequestHeader("email") String userEmail,
                                           @RequestBody UserInfoUpdateDto userInfoUpdateRequest) {
 
-        userService.updateUserInfo(principal.getName(), userInfoUpdateRequest);
+        userService.updateUserInfo(userEmail, userInfoUpdateRequest);
         return new BaseResponse<>();
     }
 
@@ -82,23 +81,23 @@ public class UserController {
 
     @Operation(summary = "유저 비밀번호 수정", description = "유저 비밀번호 수정", tags = { "User Sign" })
     @PutMapping("/password")
-    public BaseResponse<?> updateUserPassword(Principal principal,
+    public BaseResponse<?> updateUserPassword(@RequestHeader("email") String userEmail,
                                         @RequestBody UserPasswordUpdateDto userPasswordUpdateDto) {
-        userService.updateUserPassword(principal.getName(), userPasswordUpdateDto.getPassword());
+        userService.updateUserPassword(userEmail, userPasswordUpdateDto.getPassword());
         return new BaseResponse<>();
     }
 
     @Operation(summary = "유저 탈퇴", description = "유저 탈퇴", tags = { "User Sign" })
     @PutMapping("/withdraw")
-    public BaseResponse<?> withdraw(Principal principal) {
-        userService.withdraw(principal.getName());
+    public BaseResponse<?> withdraw(@RequestHeader("email") String userEmail) {
+        userService.withdraw(userEmail);
         return new BaseResponse<>();
     }
 
     @Operation(summary = "유저 로그아웃", description = "유저 로그아웃", tags = { "User Sign" })
     @PostMapping("/signout")
-    public BaseResponse<?> signOut(Principal principal) {
-        authenticationService.signOut(principal.getName());
+    public BaseResponse<?> signOut(@RequestHeader("email") String userEmail) {
+        authenticationService.signOut(userEmail);
         return new BaseResponse<>();
     }
 

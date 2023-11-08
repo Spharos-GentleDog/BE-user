@@ -1,5 +1,6 @@
 package egenius.address.application;
 
+import egenius.address.dto.AddressDefaultUpdateRequestDto;
 import egenius.address.dto.AddressRegistrationRequestDto;
 import egenius.address.entity.Address;
 import egenius.address.entity.AddressList;
@@ -47,11 +48,6 @@ public class AddressServiceImple implements AddressService {
         User user = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
 
-        // 모델메퍼로 address 값 매핑
-        Address address = modelMapper.map(addressRegistrationRequestDto, Address.class);
-
-        addressRepository.save(address);
-
         /**
          * addressRegistrationRequestDto에서 true값이 들어오고 기존에 기존에 다른 default true값이 있다면 false로 변경 하고
          * address에 default true값을 넣어준다.
@@ -61,32 +57,24 @@ public class AddressServiceImple implements AddressService {
             AddressList addressList1 = addressListRepository.findByUserIdAndDefaultAddress(user.getId(),
                     true);
 
-            // ture값인 주소지가 있다면 false로 변경
             if (addressList1 != null) {
-                addressList1.toBuilder()
-                        .defaultAddress(false)
-                        .build();
+                addressList1.updateDefaultAddress(false);
             }
 
-            // 새로운 주소지를 default true로 저장
-            AddressList addressList = AddressList.builder()
-                    .user(user)
-                    .address(address)
-                    .defaultAddress(true)
-                    .build();
-
-            addressListRepository.save(addressList);
-
-        } else {
-            // addressRegistrationRequestDto에서 false값이 들어온 경우 새로운 주소지를 default false로 저장
-            AddressList addressList = AddressList.builder()
-                    .user(user)
-                    .address(address)
-                    .defaultAddress(false)
-                    .build();
-
-            addressListRepository.save(addressList);
         }
+
+        // addressRegistrationRequestDto를 address 엔터티로 매핑
+        Address address = modelMapper.map(addressRegistrationRequestDto, Address.class);
+        addressRepository.save(address);
+
+        // addresslist의 default값 변경
+        AddressList addressList = AddressList.builder()
+                .address(address)
+                .user(user)
+                .defaultAddress(addressRegistrationRequestDto.getDefaultAddress())
+                .build();
+
+        addressListRepository.save(addressList);
     }
 
     /**
@@ -121,50 +109,51 @@ public class AddressServiceImple implements AddressService {
      */
     @Override
     public void updateAddress(Long addressId, AddressRegistrationRequestDto addressRegistrationRequestDto) {
-        AddressList addressList = addressListRepository.findByAddressId(addressId);
-        Address address = addressList.getAddress();
+        Address address = addressRepository.findById(addressId)
+                        .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_ADDRESS));
+
         address.updateAddress(addressRegistrationRequestDto);
 
     }
 
     /**
      * @param userEmail
-     * @param oldAddressId
-     * @param newAddressId
+     * @param addressDefaultUpdateRequestDto
      */
     @Override
-    public void updateDefaultAddress(String userEmail, Long oldAddressId, Long newAddressId) {
+    public void updateDefaultAddress(String userEmail, AddressDefaultUpdateRequestDto addressDefaultUpdateRequestDto) {
 
         User user  = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
 
-        // 1. oldAddressId가 null이 아니라면 기존의 defaultAddress를 false로 변경
-        if (oldAddressId != null) {
-            AddressList addressList = addressListRepository.findByAddressId(oldAddressId);
-            addressList.toBuilder()
-                    .defaultAddress(false)
-                    .build();
+        // 1. oldAddress로 addressList의 defaultAddress를 false로 변경
+        if (addressDefaultUpdateRequestDto.getOldDefaultAddressId() != null) {
+            AddressList addressList = addressListRepository.findByUserIdAndAddressId(user.getId(),
+                    addressDefaultUpdateRequestDto.getOldDefaultAddressId());
+            addressList.updateDefaultAddress(false);
         }
 
         // 2. newAddress로 addressList의 defaultAddress를 true로 변경
-        AddressList addressList = addressListRepository.findByAddressId(newAddressId);
-        addressList.toBuilder()
-                .defaultAddress(true)
-                .build();
-
+        AddressList addressList = addressListRepository.findByUserIdAndAddressId(user.getId(),
+                addressDefaultUpdateRequestDto.getNewDefaultAddressId());
+        addressList.updateDefaultAddress(true);
     }
 
     /**
-     * @param userEmail
+     *
      * @param addressId
      */
     @Override
-    public void deleteAddress(String userEmail, Long addressId) {
-        User user  = userRepository.findByUserEmail(userEmail)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+    public void deleteAddress(Long addressId) {
 
-        AddressList addressList = addressListRepository.findByUserIdAndAddressId(user.getId(), addressId);
+
+
+        AddressList addressList = addressListRepository.findByAddressId(addressId);
         addressListRepository.delete(addressList);
+
+        Address address = addressRepository.findById(addressId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_ADDRESS));
+        addressRepository.delete(address);
 
     }
 }
