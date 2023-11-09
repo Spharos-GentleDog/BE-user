@@ -1,17 +1,10 @@
-package egenius.dog.response;
+package egenius.dog.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@Builder(toBuilder = true)
-@AllArgsConstructor
-@NoArgsConstructor
-public class DogInfoResponse {
+public class DogUpdateRequestDto {
 
-    private Long id;
     private String dogName;
     private Integer dogAge;
     private Integer dogGender;
@@ -22,7 +15,6 @@ public class DogInfoResponse {
     private Integer dogBreastGirth;
     private Integer dogNeckGirth;
     private Integer dogLegLength;
-    private Boolean defaultDog;
-    private String dogBreedKorName;
+    private Long dogBreed;
 
 }

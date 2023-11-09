@@ -1,6 +1,7 @@
 package egenius.address.presentation;
 
 import egenius.address.application.AddressService;
+import egenius.address.dto.AddressDefaultUpdateRequestDto;
 import egenius.address.response.AddressInfoResponse;
 import egenius.global.base.BaseResponse;
 import egenius.address.dto.AddressRegistrationRequestDto;
@@ -30,16 +31,16 @@ public class AddressController {
 
     @Operation(summary = "배송지 등록", description = "배송지 등록", tags = { "User Address" })
     @PostMapping("")
-    public BaseResponse<?> addressRegister(Principal principal,
+    public BaseResponse<?> addressRegister(@RequestHeader("email") String userEmail,
                                            @RequestBody AddressRegistrationRequestDto addressRegistrationRequestDto) {
-        addressService.registerAddress(principal.getName(), addressRegistrationRequestDto);
+        addressService.registerAddress(userEmail, addressRegistrationRequestDto);
         return new BaseResponse<>();
     }
 
     @Operation(summary = "배송지 조회", description = "배송지 조회", tags = { "User Address" })
     @GetMapping("")
-    public BaseResponse<List<AddressInfoResponse>> addressFind(Principal principal) {
-        List<AddressInfoResponse> addressInfoResponse = addressService.findAddress(principal.getName());
+    public BaseResponse<List<AddressInfoResponse>> addressFind(@RequestHeader("email") String userEmail) {
+        List<AddressInfoResponse> addressInfoResponse = addressService.findAddress(userEmail);
         return new BaseResponse<>(addressInfoResponse);
     }
 
@@ -53,23 +54,17 @@ public class AddressController {
 
     @Operation(summary = "대표 배송지 변경", description = "대표 배송지 변경", tags = { "User Address" })
     @PutMapping("/default")
-    public BaseResponse<?> addressUpdateDefault(Principal principal,
-                                                @RequestParam("oldAddressId") Long oldAddressId,
-                                                @RequestParam("newAddressId") Long newAddressId) {
-        addressService.updateDefaultAddress(principal.getName(), oldAddressId, newAddressId);
+    public BaseResponse<?> addressUpdateDefault(@RequestHeader("email") String userEmail,
+                                                @RequestBody AddressDefaultUpdateRequestDto
+                                                        addressDefaultUpdateRequestDto) {
+        addressService.updateDefaultAddress(userEmail, addressDefaultUpdateRequestDto);
         return new BaseResponse<>();
     }
 
     @Operation(summary = "배송지 삭제", description = "배송지 삭제", tags = { "User Address" })
     @DeleteMapping("")
-    public BaseResponse<?> addressDelete(Principal principal,
-                                         @RequestParam("addressId") Long addressId) {
-        addressService.deleteAddress(principal.getName(), addressId);
+    public BaseResponse<?> addressDelete(@RequestParam("addressId") Long addressId) {
+        addressService.deleteAddress(addressId);
         return new BaseResponse<>();
     }
-
-
-
-
-
 }

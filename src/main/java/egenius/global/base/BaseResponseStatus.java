@@ -45,16 +45,12 @@ public enum BaseResponseStatus {
     PASSWORD_UPDATE_FAILED(HttpStatus.BAD_REQUEST, false, 2110, "비밀번호 변경에 실패했습니다."),
 
     // Dog
-    NO_EXIST_DOG_BREED(HttpStatus.BAD_REQUEST, false, 2200, "존재하지 않는 품종입니다.");
+    NO_EXIST_DOG_BREED(HttpStatus.BAD_REQUEST, false, 2200, "존재하지 않는 품종입니다."),
+    NO_EXIST_DOG(HttpStatus.BAD_REQUEST, false, 2201, "존재하지 않는 반려견입니다."),
 
-//    NO_EXIST_USER(false, 2104, "존재하지 않는 유저 정보입니다."),
-//    FAILED_TO_CARD_NUMBER(false, 2106, "바코드 생성에 실패했습니다"),
-//    USER_RETRIEVE_FAILED(false, 2107, "회원정보 조회에 실패했습니다."),
-//    USER_UPDATE_FAILED(false, 2108, "회원정보 변경에 실패했습니다."),
-//    PASSWORD_RETRIEVE_FAILED(false, 2109, "비밀번호 조회에 실패했습니다."),
-//    PASSWORD_UPDATE_FAILED(false, 2110, "비밀번호 변경에 실패했습니다."),
-//    PASSWORD_CONTAIN_NUM_FAILED(false, 2111,"휴대폰 번호를 포함한 비밀번호 입니다."),
-//    PASSWORD_SAME_FAILED(false, 2112,"현재 사용중인 비밀번호 입니다.");
+    // Address
+    NO_EXIST_ADDRESS(HttpStatus.BAD_REQUEST, false, 2300, "존재하지 않는 주소입니다.");
+
 
     private final HttpStatusCode httpStatusCode;
     private final boolean isSuccess;

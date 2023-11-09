@@ -1,17 +1,15 @@
 package egenius.user.application;
 
-import egenius.address.entity.Address;
-import egenius.address.infrastructure.AddressRepository;
 import egenius.global.base.BaseResponseStatus;
+import egenius.user.dto.SignUpRequestDto;
+import egenius.user.entity.User;
+import egenius.user.infrastructure.UserRepository;
+import egenius.user.response.SignUpResponse;
 import egenius.global.exception.BaseException;
 import egenius.global.config.security.JwtTokenProvider;
 import egenius.global.util.RedisUtil;
 import egenius.user.dto.SignInRequestDto;
-import egenius.user.dto.SignUpRequestDto;
-import egenius.user.entity.User;
-import egenius.user.infrastructure.UserRepository;
 import egenius.user.response.SignInResponse;
-import egenius.user.response.SignUpResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -31,7 +29,6 @@ import java.util.concurrent.TimeUnit;
 public class AuthenticationServiceImple implements AuthenticationService{
 
     private final UserRepository userRepository;
-    private final AddressRepository addressRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;

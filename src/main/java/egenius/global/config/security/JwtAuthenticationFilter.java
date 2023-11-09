@@ -1,6 +1,5 @@
 //package egenius.global.config.security;
 //
-//import egenius.global.exception.BaseException;
 //import jakarta.servlet.FilterChain;
 //import jakarta.servlet.ServletException;
 //import jakarta.servlet.http.HttpServletRequest;
