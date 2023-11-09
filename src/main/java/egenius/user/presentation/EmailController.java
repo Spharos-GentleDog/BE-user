@@ -20,14 +20,14 @@ public class EmailController {
 
     @Operation(summary = "이메일 중복 검사", description = "이메일 중복 검사", tags = { "User Sign" })
     @GetMapping("/signup/email-check")
-    public BaseResponse<?> checkEmail(@RequestHeader("email") String userEmail) {
+    public BaseResponse<?> checkEmail(@RequestParam String userEmail) {
         return new BaseResponse<>(mailService.verifyEmail(userEmail));
     }
 
 
     @Operation(summary = "이메일 인증 요청", description = "이메일 인증 요청", tags = { "User Sign" })
     @PostMapping("/signup/email-auth")
-    public BaseResponse<?> sendEmailAuthentication(@RequestHeader("email") String userEmail)
+    public BaseResponse<?> sendEmailAuthentication(@RequestBody String userEmail)
             throws MessagingException {
         mailService.sendEmailAuthentication(userEmail);
         return new BaseResponse<>();

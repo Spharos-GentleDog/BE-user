@@ -1,10 +1,10 @@
 package egenius.user.application;
 
 import egenius.global.base.BaseResponseStatus;
+import egenius.user.infrastructure.UserRepository;
 import egenius.global.exception.BaseException;
 import egenius.global.util.RedisUtil;
 import egenius.user.entity.User;
-import egenius.user.infrastructure.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
