@@ -95,7 +95,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
                 .build();
     }
 
-    public SignInResponse regenerateToken(String token, String email) {
+    public SignInResponse regenerateToken(String email, String token) {
 
 
         String refreshToken = token.substring(7);

@@ -25,7 +25,7 @@ public class DogController {
 
     @Operation(summary = "반려견 등록", description = "반려견 등록", tags = { "User Dog" })
     @PostMapping("")
-    public BaseResponse<?> dogRegister(@RequestHeader("email") String userEmail,
+    public BaseResponse<?> dogRegister(@RequestHeader("userEmail") String userEmail,
                                        @RequestBody DogRegistrationRequestDto dogRegistrationRequestDto) {
         dogService.registerDog(userEmail, dogRegistrationRequestDto);
         return new BaseResponse<>();
@@ -40,7 +40,7 @@ public class DogController {
 
     @Operation(summary = "반려견 정보 조회", description = "반려견 정보 조회", tags = { "User Dog" })
     @GetMapping("")
-    public BaseResponse<List<DogInfoResponse>> dogInfo(@RequestHeader("email") String userEmail) {
+    public BaseResponse<List<DogInfoResponse>> dogInfo(@RequestHeader("userEmail") String userEmail) {
         List<DogInfoResponse> dogInfoResponse = dogService.getDogInfo(userEmail);
         log.info("dogInfoResponse : " + dogInfoResponse);
         return new BaseResponse<>(dogInfoResponse);
@@ -57,7 +57,7 @@ public class DogController {
     @Operation(summary = "대표 반려견 변경", description = "현재 대표 반려견 false로 변경하고 새로운 대표 반려견 true 변경",
             tags = { "User Dog" })
     @PutMapping("/default")
-    public BaseResponse<?> dogRepresentativeUpdate(@RequestHeader("email") String userEmail,
+    public BaseResponse<?> dogRepresentativeUpdate(@RequestHeader("userEmail") String userEmail,
                                                    @RequestBody DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto) {
         dogService.updateRepresentativeDog(userEmail, dogDefaultUpdateRequestDto);
         return new BaseResponse<>();

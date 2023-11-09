@@ -31,7 +31,7 @@ public class AddressController {
 
     @Operation(summary = "배송지 등록", description = "배송지 등록", tags = { "User Address" })
     @PostMapping("")
-    public BaseResponse<?> addressRegister(@RequestHeader("email") String userEmail,
+    public BaseResponse<?> addressRegister(@RequestHeader("userEmail") String userEmail,
                                            @RequestBody AddressRegistrationRequestDto addressRegistrationRequestDto) {
         addressService.registerAddress(userEmail, addressRegistrationRequestDto);
         return new BaseResponse<>();
@@ -39,7 +39,7 @@ public class AddressController {
 
     @Operation(summary = "배송지 조회", description = "배송지 조회", tags = { "User Address" })
     @GetMapping("")
-    public BaseResponse<List<AddressInfoResponse>> addressFind(@RequestHeader("email") String userEmail) {
+    public BaseResponse<List<AddressInfoResponse>> addressFind(@RequestHeader("userEmail") String userEmail) {
         List<AddressInfoResponse> addressInfoResponse = addressService.findAddress(userEmail);
         return new BaseResponse<>(addressInfoResponse);
     }
@@ -54,7 +54,7 @@ public class AddressController {
 
     @Operation(summary = "대표 배송지 변경", description = "대표 배송지 변경", tags = { "User Address" })
     @PutMapping("/default")
-    public BaseResponse<?> addressUpdateDefault(@RequestHeader("email") String userEmail,
+    public BaseResponse<?> addressUpdateDefault(@RequestHeader("userEmail") String userEmail,
                                                 @RequestBody AddressDefaultUpdateRequestDto
                                                         addressDefaultUpdateRequestDto) {
         addressService.updateDefaultAddress(userEmail, addressDefaultUpdateRequestDto);

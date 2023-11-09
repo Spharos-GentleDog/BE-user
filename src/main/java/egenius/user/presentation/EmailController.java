@@ -30,14 +30,14 @@ public class EmailController {
     @PostMapping("/signup/email-auth")
     public BaseResponse<?> sendEmailAuthentication(@RequestBody EmailAuthRequestDto emailAuthRequestDto)
             throws MessagingException {
-        mailService.sendEmailAuthentication(emailAuthRequestDto.getEmail());
+        mailService.sendEmailAuthentication(emailAuthRequestDto.getUserEmail());
         return new BaseResponse<>();
     }
 
     @Operation(summary = "이메일 인증 확인", description = "이메일 인증 확인", tags = { "User Sign" })
     @GetMapping ("/signup/email-verify")
     public BaseResponse<?> emailVerify(@RequestBody EmailVerifyRequestDto emailVerifyRequestDto) {
-        mailService.verifyEmailCode(emailVerifyRequestDto.getEmail(), emailVerifyRequestDto.getCode());
+        mailService.verifyEmailCode(emailVerifyRequestDto.getUserEmail(), emailVerifyRequestDto.getCode());
         return new BaseResponse<>();
     }
 }
