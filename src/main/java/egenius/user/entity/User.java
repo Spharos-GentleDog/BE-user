@@ -35,6 +35,11 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String userPhoneNumber;
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+//    @Column(name = "provider", length = 10)
+//    private String provider; //어떤 OAuth인지(google, naver 등)
+//    @Column(name = "provide_id", length = 30)
+//    private String provideId; // 해당 OAuth 의 key(id)
+
 
     /**
      * 도메인 로직
@@ -68,9 +73,24 @@ public class User extends BaseTimeEntity implements UserDetails {
         this.deletedAt = LocalDateTime.now();
     }
 
+//    // 4. OAuth 회원가입
+//    public User updateOAuthInfo(String usersName, String password, String userEmail, String provider, String provideId) {
+//        this.usersName = usersName;
+//        this.password = password;
+//        this.userEmail = userEmail;
+//        this.provider = provider;
+//        this.provideId = provideId;
+//        return this;
+//    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
@@ -95,6 +115,8 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
+        // todo: 1년 동안 사용하지 않으면 휴면 계정으로 바꾼다.
+        // 현재 시간 - 마지막 로그인 시간 => 1년을 초기하면 return false로 바꾼다.
         return true;
     }
 

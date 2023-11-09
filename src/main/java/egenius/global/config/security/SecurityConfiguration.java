@@ -1,19 +1,14 @@
 package egenius.global.config.security;
 
+import egenius.user.application.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -34,6 +29,7 @@ public class SecurityConfiguration {
 //        };
 //    }
 
+    private final CustomOAuth2UserService customOAuth2UserService;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -63,8 +59,13 @@ public class SecurityConfiguration {
                 // 토큰 방식을 사용하므로, 서버에서 session을 관리하지 않음. 따라서 STATELESS로 설정
                 .sessionManagement(
                         sessionManagement -> sessionManagement
-                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                ); // 세션을 생성하지 않음. JWT 인증이기 때문에 상태가 없는(stateless) 세션 정책을 사용
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .oauth2Login(configure ->
+                        configure.userInfoEndpoint(config -> config.userService(customOAuth2UserService))
+//                                .authorizationEndpoint(config -> config.authorizationRequestRepository(httpCookieOAuth2AuthorizationRequestRepository))
+//                                .successHandler(oAuth2AuthenticationSuccessHandler)
+//                                .failureHandler(oAuth2AuthenticationFailureHandler)
+                );; // 세션을 생성하지 않음. JWT 인증이기 때문에 상태가 없는(stateless) 세션 정책을 사용
 //                .authenticationProvider(authenticationProvider); // 커스텀 인증을 사용
                 // JWT 인증 필터를 UsernamePasswordAuthenticationFilter 전에 추가
 //                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
