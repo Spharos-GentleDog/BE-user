@@ -13,7 +13,7 @@ public class AddressInfoResponse {
 
         private Long id;
         private String userAddress;
-        private String addressName;
+        private String addressAlias;
         private String recipientPhoneNumber;
         private String recipientName;
         private String addressRequestMessage;
