@@ -3,6 +3,7 @@ package egenius.user.presentation;
 import egenius.global.base.BaseResponse;
 import egenius.user.application.MailService;
 import egenius.user.dto.EmailAuthRequestDto;
+import egenius.user.dto.EmailVerifyRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +28,16 @@ public class EmailController {
 
     @Operation(summary = "이메일 인증 요청", description = "이메일 인증 요청", tags = { "User Sign" })
     @PostMapping("/signup/email-auth")
-    public BaseResponse<?> sendEmailAuthentication(@RequestBody String userEmail)
+    public BaseResponse<?> sendEmailAuthentication(@RequestBody EmailAuthRequestDto emailAuthRequestDto)
             throws MessagingException {
-        mailService.sendEmailAuthentication(userEmail);
+        mailService.sendEmailAuthentication(emailAuthRequestDto.getEmail());
         return new BaseResponse<>();
     }
 
     @Operation(summary = "이메일 인증 확인", description = "이메일 인증 확인", tags = { "User Sign" })
     @GetMapping ("/signup/email-verify")
-    public BaseResponse<?> emailVerify(@RequestBody EmailAuthRequestDto emailAuthRequestDto) {
-        mailService.verifyEmailCode(emailAuthRequestDto.getEmail(), emailAuthRequestDto.getCode());
+    public BaseResponse<?> emailVerify(@RequestBody EmailVerifyRequestDto emailVerifyRequestDto) {
+        mailService.verifyEmailCode(emailVerifyRequestDto.getEmail(), emailVerifyRequestDto.getCode());
         return new BaseResponse<>();
     }
 }
