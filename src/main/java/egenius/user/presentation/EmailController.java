@@ -35,7 +35,7 @@ public class EmailController {
     }
 
     @Operation(summary = "이메일 인증 확인", description = "이메일 인증 확인", tags = { "User Sign" })
-    @GetMapping ("/signup/email-verify")
+    @PostMapping ("/signup/email-verify")
     public BaseResponse<?> emailVerify(@RequestBody EmailVerifyRequestDto emailVerifyRequestDto) {
         mailService.verifyEmailCode(emailVerifyRequestDto.getUserEmail(), emailVerifyRequestDto.getCode());
         return new BaseResponse<>();
