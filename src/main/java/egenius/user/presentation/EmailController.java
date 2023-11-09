@@ -2,7 +2,8 @@ package egenius.user.presentation;
 
 import egenius.global.base.BaseResponse;
 import egenius.user.application.MailService;
-import egenius.user.dto.EmailRequestDto;
+import egenius.user.dto.EmailAuthRequestDto;
+import egenius.user.dto.EmailVerifyRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +19,25 @@ public class EmailController {
 
     private final MailService mailService;
 
-    @Operation(summary = "메일인증 요청", description = "메일인증 요청", tags = { "User Sign" })
+    @Operation(summary = "이메일 중복 검사", description = "이메일 중복 검사", tags = { "User Sign" })
+    @GetMapping("/signup/email-check")
+    public BaseResponse<?> checkEmail(@RequestParam String userEmail) {
+        return new BaseResponse<>(mailService.verifyEmail(userEmail));
+    }
+
+
+    @Operation(summary = "이메일 인증 요청", description = "이메일 인증 요청", tags = { "User Sign" })
     @PostMapping("/signup/email-auth")
-    public BaseResponse<?> sendEmailAuthentication(@RequestParam("email") String email) throws MessagingException {
-        mailService.sendEmailAuthentication(email);
+    public BaseResponse<?> sendEmailAuthentication(@RequestBody EmailAuthRequestDto emailAuthRequestDto)
+            throws MessagingException {
+        mailService.sendEmailAuthentication(emailAuthRequestDto.getUserEmail());
         return new BaseResponse<>();
     }
 
-    @Operation(summary = "메일인증 확인", description = "메일인증", tags = { "User Sign" })
-    @PostMapping("/signup/email-verify")
-    public BaseResponse<?> emailVerify(@RequestBody EmailRequestDto emailRequestDto) {
-        mailService.verifyEmailCode(emailRequestDto.getEmail(), emailRequestDto.getCode());
+    @Operation(summary = "이메일 인증 확인", description = "이메일 인증 확인", tags = { "User Sign" })
+    @PostMapping ("/signup/email-verify")
+    public BaseResponse<?> emailVerify(@RequestBody EmailVerifyRequestDto emailVerifyRequestDto) {
+        mailService.verifyEmailCode(emailVerifyRequestDto.getUserEmail(), emailVerifyRequestDto.getCode());
         return new BaseResponse<>();
     }
 }

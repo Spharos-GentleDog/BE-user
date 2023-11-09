@@ -6,10 +6,11 @@ import lombok.Getter;
 public class AddressRegistrationRequestDto {
 
     private String userAddress;
-    private String addressName;
+    private String addressAlias;
     private String recipientPhoneNumber;
     private String recipientName;
     private String addressRequestMessage;
     private String entrancePassword;
+    private Boolean defaultAddress;
 
 }

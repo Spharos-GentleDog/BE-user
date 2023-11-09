@@ -3,9 +3,9 @@ package egenius.user.dto;
 import lombok.Getter;
 
 @Getter
-public class EmailRequestDto {
+public class EmailVerifyRequestDto {
 
-    private String email;
+    private String userEmail;
     private String code;
 
 }

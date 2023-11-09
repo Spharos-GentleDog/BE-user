@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DogInfoResponse {
 
+    private Long id;
     private String dogName;
     private Integer dogAge;
     private Integer dogGender;

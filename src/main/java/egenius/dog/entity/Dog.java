@@ -1,6 +1,7 @@
 package egenius.dog.entity;
 
 import egenius.dog.dto.DogRegistrationRequestDto;
+import egenius.dog.dto.DogUpdateRequestDto;
 import egenius.global.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,7 +9,7 @@ import lombok.*;
 @Entity
 @Getter
 @Builder(toBuilder = true)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class Dog extends BaseTimeEntity {
@@ -52,20 +53,21 @@ public class Dog extends BaseTimeEntity {
     private DogBreed dogBreed;
 
     // 1. 강아지 정보 수정
-    public void updateDog(DogRegistrationRequestDto dogRegistrationRequestDto){
-        this.dogAge = dogRegistrationRequestDto.getDogAge();
-        this.dogBodyLength = dogRegistrationRequestDto.getDogBodyLength();
-        this.dogBreastGirth = dogRegistrationRequestDto.getDogBreastGirth();
-        this.dogFurColor = dogRegistrationRequestDto.getDogFurColor();
-        this.dogGender = dogRegistrationRequestDto.getDogGender();
-        this.dogImageUrl = dogRegistrationRequestDto.getDogImageUrl();
-        this.dogLegLength = dogRegistrationRequestDto.getDogLegLength();
-        this.dogName = dogRegistrationRequestDto.getDogName();
-        this.dogNeckGirth = dogRegistrationRequestDto.getDogNeckGirth();
-        this.dogWeight = dogRegistrationRequestDto.getDogWeight();
+    public void updateDog(DogUpdateRequestDto dogUpdateRequestDto){
+        this.dogName = dogUpdateRequestDto.getDogName();
+        this.dogAge = dogUpdateRequestDto.getDogAge();
+        this.dogGender = dogUpdateRequestDto.getDogGender();
+        this.dogWeight = dogUpdateRequestDto.getDogWeight();
+        this.dogImageUrl = dogUpdateRequestDto.getDogImageUrl();
+        this.dogFurColor = dogUpdateRequestDto.getDogFurColor();
+        this.dogBodyLength = dogUpdateRequestDto.getDogBodyLength();
+        this.dogBreastGirth = dogUpdateRequestDto.getDogBreastGirth();
+        this.dogLegLength = dogUpdateRequestDto.getDogLegLength();
+        this.dogNeckGirth = dogUpdateRequestDto.getDogNeckGirth();
 
     }
 
+    // 2. 강아지 품종 저장
     public void setDogBreed(DogBreed dogBreed) {
         this.dogBreed = dogBreed;
     }

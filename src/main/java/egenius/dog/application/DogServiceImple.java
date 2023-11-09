@@ -1,6 +1,8 @@
 package egenius.dog.application;
 
+import egenius.dog.dto.DogDefaultUpdateRequestDto;
 import egenius.dog.dto.DogRegistrationRequestDto;
+import egenius.dog.dto.DogUpdateRequestDto;
 import egenius.dog.entity.Dog;
 import egenius.dog.entity.DogBreed;
 import egenius.dog.entity.DogList;
@@ -51,36 +53,35 @@ public class DogServiceImple implements DogService {
         User user = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
 
+        /**
+         * dogRegistrationRequestDto에서 true값이 들어오고 기존에 다른 default true값이 있다면 false로 변경 하고
+         * 새로운 반려견을 default true로 변경
+         */
+
+        if (dogRegistrationRequestDto.getDefaultDog()) {
+            // 기존에 default true값이 있다면 false로 변경
+            DogList dogList1 = dogListRepository.findByUserIdAndDefaultDog(user.getId(), true);
+
+            if (dogList1 != null)
+                dogList1.updateDefaultDog(false);
+        }
+
         Dog dog = modelMapper.map(dogRegistrationRequestDto, Dog.class);
 
         // dogbreedId로 dogBreed 조회 및 dog에 저장
         DogBreed dogBreed = dogBreedRepository.findById(dogRegistrationRequestDto.getDogBreed())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_DOG_BREED));
         dog.setDogBreed(dogBreed);
-
-        // 유저 반려견 등록
         dogRepository.save(dog);
 
-        // 유저 반려견 리스트에 값이 있는지 조회
-        Boolean dogList = dogListRepository.existsByUserId(user.getId());
+        // dogList의 default값 변경
+        DogList dogList = DogList.builder()
+                .dog(dog)
+                .user(user)
+                .defaultDog(dogRegistrationRequestDto.getDefaultDog())
+                .build();
 
-        // 유저 반려견이 없다면 처음 등록하는 반려견을 대표 반려견으로 등록
-        if (!dogList) {
-            DogList dogList1 = DogList.builder()
-                    .dog(dog)
-                    .user(user)
-                    .defaultDog(true)
-                    .build();
-            dogListRepository.save(dogList1);
-        } else {
-            // 유저 반려견이 있다면 다음 반려견은 false로 등록
-            DogList dogList2 = DogList.builder()
-                    .dog(dog)
-                    .user(user)
-                    .defaultDog(false)
-                    .build();
-            dogListRepository.save(dogList2);
-        }
+        dogListRepository.save(dogList);
     }
 
     /**
@@ -106,19 +107,19 @@ public class DogServiceImple implements DogService {
     public List<DogInfoResponse> getDogInfo(String userEmail) {
         User user = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
-
-
+        // 유저의 반려견 리스트 조회
         List<DogList> dogList = dogListRepository.findByUserId(user.getId());
+
         // DogList 엔터티 리스트를 스트림으로 변환
         return dogList.stream()
-                .map(dogList1 -> {
-                    Dog myDog = dogList1.getDog(); // DogList 엔터티에서 Dog 객체를 가져옴
+                .map(item -> {
+                    Dog myDog = item.getDog(); // DogList 엔터티에서 Dog 객체를 가져옴
                     // dogInfoResponse값 넣어줌
                     DogInfoResponse dogInfoResponse = modelMapper.map(myDog, DogInfoResponse.class);
                     // dogbreedname값 넣어줌
                     dogInfoResponse = dogInfoResponse.toBuilder()
                             .dogBreedKorName(myDog.getDogBreed().getDogBreedKorName())
-                            .defaultDog(dogList1.getDefaultDog())
+                            .defaultDog(item.getDefaultDog())
                             .build();
                     return dogInfoResponse;
                 })
@@ -128,64 +129,60 @@ public class DogServiceImple implements DogService {
 
     /**
      * 4. 반려견 정보 수정
-     * @param dogRegistrationRequestDto
+     * @param dogId
+     * @param dogUpdateRequestDto
      */
     @Override
-    public void updateDog(Long dogListId, DogRegistrationRequestDto dogRegistrationRequestDto) {
-        DogList dogList = dogListRepository.findByDogId(dogListId);
-        Dog dog = dogList.getDog(); // DogList 엔터티에서 Dog 객체를 가져옴
-        dog.updateDog(dogRegistrationRequestDto);
+    public void updateDog(Long dogId, DogUpdateRequestDto dogUpdateRequestDto) {
+
+        Dog dog = dogRepository.findById(dogId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_DOG));
+        dog.updateDog(dogUpdateRequestDto);
+
     }
 
     /**
      * 5. 대표 반려견 변경
      * @param userEmail
-     * @param ordDogId
-     * @param newDogId
+     * @param dogDefaultUpdateRequestDto
+     * @return
      */
     @Override
-    public void updateRepresentativeDog(String userEmail, Long ordDogId, Long newDogId) {
+    public void updateRepresentativeDog(String userEmail, DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto) {
 
         User user  = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
 
         // 1. null이 아니라면 기존 대표 반려견 정보 조회 하고 false로 변경
-        if (ordDogId != null) {
-            DogList dogList = dogListRepository.findByUserIdAndDogId(user.getId(), ordDogId);
+        if (dogDefaultUpdateRequestDto.getOldDefaultDogId() != null) {
+            DogList dogList = dogListRepository.findByUserIdAndDogId(user.getId(),
+                    dogDefaultUpdateRequestDto.getOldDefaultDogId());
             dogList.updateDefaultDog(false);
         }
 
-        // 2. 새로운 대표 반려견 정보 조회 하고 true로 변경
-        DogList dogList = dogListRepository.findByUserIdAndDogId(user.getId(), newDogId);
+        // 2. newDogId로 dogList의 defaultDog를 true로 변경
+        DogList dogList = dogListRepository.findByDogId(dogDefaultUpdateRequestDto.getNewDefaultDogId());
         dogList.updateDefaultDog(true);
-
     }
 
     /**
      * 6. 반려견 정보 삭제
-     * @param userEmail
-     * @param dogListId
+     * @param dogId
      */
     @Override
-    public void deleteDog(String userEmail, Long dogListId) {
-        User user = userRepository.findByUserEmail(userEmail)
-                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+    public void deleteDog(Long dogId) {
 
-        DogList dogList = dogListRepository.findByUserIdAndDogId(user.getId(), dogListId);
-        // 삭제한 반려견이 기본 반려견이라면 다음 반려견을 기본 반려견으로 변경
-        if (dogList.getDefaultDog()) {
-            DogList nextDogList = dogListRepository.findByUserId(user.getId())
-                    .stream() // DogList 엔터티 리스트를 스트림으로 변환
-                    .filter(dogList1 -> !dogList1.getId().equals(dogListId)) // 기본 반려견이 아닌 반려견을 필터링
-                    .findFirst()
-                    .orElse(null); // 첫번째 반려견을 가져옴 없다면 null
-
-            // 첫번째 반려견이 있다면 true로 변경
-            if (nextDogList != null)
-                // 첫번째 반려견을 기본 반려견으로 변경
-                nextDogList.updateDefaultDog(true);
-        }
-
+        /**
+         * DogList에서 Foreign Key로 dogId를 참조하고 있기 때문에 dogId를 참조하는 DogList를 먼저 삭제해야 한다.
+         * 그리고 DogList를 삭제하면 DogList의 Foreign Key로 dogId를 참조하고 있기 때문에 dogId를 참조하는 Dog를 삭제해야 한다.
+         * 만일, Dog를 먼저 삭제하면 DogList의 Foreign Key로 dogId를 참조하고 있기 때문에 DogList를 삭제할 수 없다.
+         */
+        DogList dogList = dogListRepository.findByDogId(dogId);
         dogListRepository.delete(dogList);
+
+        Dog dog = dogRepository.findById(dogId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_DOG));
+        dogRepository.delete(dog);
+
     }
 }

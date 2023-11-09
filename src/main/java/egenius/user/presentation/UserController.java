@@ -3,15 +3,12 @@ package egenius.user.presentation;
 import egenius.global.base.BaseResponse;
 import egenius.user.application.AuthenticationService;
 import egenius.user.application.UserService;
-import egenius.user.dto.SignInRequestDto;
-import egenius.user.dto.SignUpRequestDto;
-import egenius.user.dto.UserInfoUpdateDto;
-import egenius.user.dto.UserPasswordUpdateDto;
-import egenius.user.response.*;
+import egenius.user.dto.*;
+import egenius.user.response.SignInResponse;
+import egenius.user.response.UserFindEmailResponse;
+import egenius.user.response.UserInfoResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.ws.rs.PUT;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -57,19 +54,18 @@ public class UserController {
 
     @Operation(summary = "유저 정보 조회", description = "유저 정보 조회", tags = { "User Sign" })
     @GetMapping("/info")
-    public BaseResponse<UserInfoResponse> getUserInfo(Principal principal) {
+    public BaseResponse<UserInfoResponse> getUserInfo(@RequestHeader("userEmail") String userEmail) {
         // 토큰값에서 loginId 추출
-        log.info("principal : {}", principal.getName());
-        UserInfoResponse userInfoResponse = userService.getUserInfo(principal.getName());
+        UserInfoResponse userInfoResponse = userService.getUserInfo(userEmail);
         return new BaseResponse<>(userInfoResponse);
     }
 
     @Operation(summary = "유저 정보 수정", description = "유저 정보 수정", tags = { "User Sign" })
     @PutMapping("/info")
-    public BaseResponse<?> updateUserInfo(Principal principal,
+    public BaseResponse<?> updateUserInfo(@RequestHeader("userEmail") String userEmail,
                                           @RequestBody UserInfoUpdateDto userInfoUpdateRequest) {
 
-        userService.updateUserInfo(principal.getName(), userInfoUpdateRequest);
+        userService.updateUserInfo(userEmail, userInfoUpdateRequest);
         return new BaseResponse<>();
     }
 
@@ -82,33 +78,32 @@ public class UserController {
 
     @Operation(summary = "유저 비밀번호 수정", description = "유저 비밀번호 수정", tags = { "User Sign" })
     @PutMapping("/password")
-    public BaseResponse<?> updateUserPassword(Principal principal,
+    public BaseResponse<?> updateUserPassword(@RequestHeader("userEmail") String userEmail,
                                         @RequestBody UserPasswordUpdateDto userPasswordUpdateDto) {
-        userService.updateUserPassword(principal.getName(), userPasswordUpdateDto.getPassword());
+        userService.updateUserPassword(userEmail, userPasswordUpdateDto.getPassword());
         return new BaseResponse<>();
     }
 
     @Operation(summary = "유저 탈퇴", description = "유저 탈퇴", tags = { "User Sign" })
     @PutMapping("/withdraw")
-    public BaseResponse<?> withdraw(Principal principal) {
-        userService.withdraw(principal.getName());
+    public BaseResponse<?> withdraw(@RequestHeader("userEmail") String userEmail) {
+        userService.withdraw(userEmail);
         return new BaseResponse<>();
     }
 
     @Operation(summary = "유저 로그아웃", description = "유저 로그아웃", tags = { "User Sign" })
     @PostMapping("/signout")
-    public BaseResponse<?> signOut(Principal principal) {
-        authenticationService.signOut(principal.getName());
+    public BaseResponse<?> signOut(@RequestHeader("userEmail") String userEmail) {
+        authenticationService.signOut(userEmail);
         return new BaseResponse<>();
     }
 
     @Operation(summary = "토큰 재발급", description = "access token이 만료 됐다면 실행", tags = { "User Sign" })
     @PostMapping("/refresh")
-    public BaseResponse<SignInResponse> regenerateToken(HttpServletRequest request,
-                                                        Principal principal) {
+    public BaseResponse<SignInResponse> regenerateToken(@RequestHeader("userEmail") String userEmail,
+                                                        @RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
 
-        String token = request.getHeader("Authorization");
-        SignInResponse signInResponse = authenticationService.regenerateToken(token, principal.getName());
+        SignInResponse signInResponse = authenticationService.regenerateToken(userEmail, refreshTokenRequestDto.getRefreshToken());
         return new BaseResponse<>(signInResponse);
 
     }

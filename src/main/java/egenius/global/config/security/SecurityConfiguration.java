@@ -20,19 +20,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration {
     // 추후 게이트웨이로 옮길 예정
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final AuthenticationProvider authenticationProvider;
+//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+//    private final AuthenticationProvider authenticationProvider;
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        return request -> {
-            var cors = new org.springframework.web.cors.CorsConfiguration();
-            cors.setAllowedOriginPatterns(List.of("*"));
-            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-            cors.setAllowedHeaders(List.of("*"));
-            return cors;
-        };
-    }
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        return request -> {
+//            var cors = new org.springframework.web.cors.CorsConfiguration();
+//            cors.setAllowedOriginPatterns(List.of("*"));
+//            cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//            cors.setAllowedHeaders(List.of("*"));
+//            return cors;
+//        };
+//    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -53,13 +53,7 @@ public class SecurityConfiguration {
 //                                .permitAll() // 모든 가맹점 정보 조회
                                 // url이 특정지어지는 경우 -> HttpMethod를 적어줄 필요가 없다
                                 .requestMatchers(
-                                        "/api/v1/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-resources/**",
-                                        "/api-docs/**",
-                                        "/api/v1/user/signup/**",               // 회원가입
-                                        "/api/v1/user/signin/**",               // 로그인
-                                        "/api/v1/user/refresh"                  // 토큰 재발급
+                                        "**"                 // 토큰 재발급
                                 )
                                 .permitAll() // 위의 url은 모두 filter를 거치지 않음
                                 .anyRequest().authenticated() // 위의 url을 제외한 모든 url은 필터를 거쳐야함
@@ -70,10 +64,10 @@ public class SecurityConfiguration {
                 .sessionManagement(
                         sessionManagement -> sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                ) // 세션을 생성하지 않음. JWT 인증이기 때문에 상태가 없는(stateless) 세션 정책을 사용
-                .authenticationProvider(authenticationProvider) // 커스텀 인증을 사용
+                ); // 세션을 생성하지 않음. JWT 인증이기 때문에 상태가 없는(stateless) 세션 정책을 사용
+//                .authenticationProvider(authenticationProvider); // 커스텀 인증을 사용
                 // JWT 인증 필터를 UsernamePasswordAuthenticationFilter 전에 추가
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

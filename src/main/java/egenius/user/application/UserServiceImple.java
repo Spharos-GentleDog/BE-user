@@ -2,10 +2,10 @@ package egenius.user.application;
 
 
 import egenius.global.base.BaseResponseStatus;
-import egenius.global.exception.BaseException;
-import egenius.user.dto.UserInfoUpdateDto;
 import egenius.user.entity.User;
 import egenius.user.infrastructure.UserRepository;
+import egenius.global.exception.BaseException;
+import egenius.user.dto.UserInfoUpdateDto;
 import egenius.user.response.UserFindEmailResponse;
 import egenius.user.response.UserInfoResponse;
 import lombok.RequiredArgsConstructor;

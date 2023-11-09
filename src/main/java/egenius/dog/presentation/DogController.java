@@ -1,7 +1,8 @@
 package egenius.dog.presentation;
 
 import egenius.dog.application.DogService;
-import egenius.dog.entity.DogBreed;
+import egenius.dog.dto.DogDefaultUpdateRequestDto;
+import egenius.dog.dto.DogUpdateRequestDto;
 import egenius.dog.response.DogBreedInfoResponse;
 import egenius.dog.response.DogInfoResponse;
 import egenius.global.base.BaseResponse;
@@ -24,9 +25,9 @@ public class DogController {
 
     @Operation(summary = "반려견 등록", description = "반려견 등록", tags = { "User Dog" })
     @PostMapping("")
-    public BaseResponse<?> dogRegister(Principal principal,
+    public BaseResponse<?> dogRegister(@RequestHeader("userEmail") String userEmail,
                                        @RequestBody DogRegistrationRequestDto dogRegistrationRequestDto) {
-        dogService.registerDog(principal.getName(), dogRegistrationRequestDto);
+        dogService.registerDog(userEmail, dogRegistrationRequestDto);
         return new BaseResponse<>();
     }
 
@@ -39,8 +40,8 @@ public class DogController {
 
     @Operation(summary = "반려견 정보 조회", description = "반려견 정보 조회", tags = { "User Dog" })
     @GetMapping("")
-    public BaseResponse<List<DogInfoResponse>> dogInfo(Principal principal) {
-        List<DogInfoResponse> dogInfoResponse = dogService.getDogInfo(principal.getName());
+    public BaseResponse<List<DogInfoResponse>> dogInfo(@RequestHeader("userEmail") String userEmail) {
+        List<DogInfoResponse> dogInfoResponse = dogService.getDogInfo(userEmail);
         log.info("dogInfoResponse : " + dogInfoResponse);
         return new BaseResponse<>(dogInfoResponse);
     }
@@ -48,26 +49,24 @@ public class DogController {
     @Operation(summary = "반려견 정보 수정", description = "반려견 정보 수정", tags = { "User Dog" })
     @PutMapping("")
     public BaseResponse<?> dogUpdate(@RequestParam("dogListId") Long dogListId,
-            @RequestBody DogRegistrationRequestDto dogRegisterRequestDto) {
+                                     @RequestBody DogUpdateRequestDto dogRegisterRequestDto) {
         dogService.updateDog(dogListId, dogRegisterRequestDto);
         return new BaseResponse<>();
     }
 
     @Operation(summary = "대표 반려견 변경", description = "현재 대표 반려견 false로 변경하고 새로운 대표 반려견 true 변경",
             tags = { "User Dog" })
-    @PutMapping("/representative")
-    public BaseResponse<?> dogRepresentativeUpdate(Principal principal,
-                                                   @RequestParam("oldDogId") Long oldDogId,
-                                                   @RequestParam("newDogId") Long newDogId) {
-        dogService.updateRepresentativeDog(principal.getName(), oldDogId, newDogId);
+    @PutMapping("/default")
+    public BaseResponse<?> dogRepresentativeUpdate(@RequestHeader("userEmail") String userEmail,
+                                                   @RequestBody DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto) {
+        dogService.updateRepresentativeDog(userEmail, dogDefaultUpdateRequestDto);
         return new BaseResponse<>();
     }
 
     @Operation(summary = "반려견 정보 삭제", description = "반려견 정보 삭제", tags = { "User Dog" })
     @DeleteMapping("")
-    public BaseResponse<?> dogDelete(Principal principal,
-                                     @RequestParam("dogListId") Long dogListId) {
-        dogService.deleteDog(principal.getName(), dogListId);
+    public BaseResponse<?> dogDelete(@RequestParam("dogId") Long dogId) {
+        dogService.deleteDog(dogId);
         return new BaseResponse<>();
     }
 

@@ -1,10 +1,10 @@
 package egenius.user.application;
 
 import egenius.global.base.BaseResponseStatus;
+import egenius.user.infrastructure.UserRepository;
 import egenius.global.exception.BaseException;
 import egenius.global.util.RedisUtil;
 import egenius.user.entity.User;
-import egenius.user.infrastructure.UserRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -93,17 +94,26 @@ public class MailServiceImple implements MailService{
      */
     public void sendEmailAuthentication(String email) throws MessagingException {
 
-        // 이메일이 존재한다면 이미 가입된 유저
-        if (userRepository.existsByUserEmail(email)) {
-            throw new BaseException(BaseResponseStatus.DUPLICATE_EMAIL);
-        }
-
         if (redisUtil.existData(email)) {
             redisUtil.deleteData(email);
         }
 
         MimeMessage emailForm = createEmailForm(email);
         mailSender.send(emailForm);
+    }
+
+    @Override
+    public boolean verifyEmail(String email) {
+        // 이메일이 존재한다면 이미 가입된 유저
+        Optional<User> user = userRepository.findByUserEmail(email);
+
+        // 해당 이메일이 DB에 존재하면 체크 결과를 true로 리턴
+        if(user.isPresent()){
+            return true;
+        }
+
+        // 해당 이메일이 DB에 존재하지 않으면 체크 결과를 false로 리턴
+        return false;
     }
 
     /**

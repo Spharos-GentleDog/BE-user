@@ -27,4 +27,8 @@ public class AddressList {
     @Column(nullable = false, name = "default_address", columnDefinition = "boolean default false")
     private Boolean defaultAddress;
 
+    // 1. 유저 대표 배송지 수정
+    public void updateDefaultAddress(Boolean defaultAddress) {
+        this.defaultAddress = defaultAddress;
+    }
 }
