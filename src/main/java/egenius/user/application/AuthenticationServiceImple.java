@@ -47,6 +47,11 @@ public class AuthenticationServiceImple implements AuthenticationService{
 
     @Override
     public void signUp(SignUpRequestDto signUpRequestDto) {
+
+        if (userRepository.existsByUserEmail(signUpRequestDto.getUserEmail())) {
+            throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+        }
+
         User user = modelMapper.map(signUpRequestDto, User.class);
 
         user.hashPassword(user.getPassword());
@@ -58,7 +63,6 @@ public class AuthenticationServiceImple implements AuthenticationService{
                 .build();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public SignInResponse signIn(SignInRequestDto signInRequestDto) {
 
