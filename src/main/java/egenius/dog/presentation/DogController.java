@@ -35,7 +35,7 @@ public class DogController {
      */
 
     @Operation(summary = "로그인 이전 반려견 등록", description = "로그인 이후 필터 필요없는 반려견 등록", tags = { "User Dog" })
-    @PostMapping("/signup/")
+    @PostMapping("/signup")
     public BaseResponse<?> dogSignUpRegister(@RequestBody DogSignUpRegistrationRequestDto dogSignUpRegistrationRequestDto) {
         dogService.signUpRegisterDog(dogSignUpRegistrationRequestDto);
         return new BaseResponse<>();
