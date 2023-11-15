@@ -92,6 +92,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
                 .refreshToken(refreshToken)
                 .userEmail(user.getUserEmail())
                 .usersName(user.getUsersName())
+                .role("USER")
                 .build();
     }
 

@@ -21,7 +21,7 @@ public class QAddress extends EntityPathBase<Address> {
 
     public final egenius.global.base.QBaseTimeEntity _super = new egenius.global.base.QBaseTimeEntity(this);
 
-    public final StringPath addressName = createString("addressName");
+    public final StringPath addressAlias = createString("addressAlias");
 
     public final StringPath addressRequestMessage = createString("addressRequestMessage");
 
