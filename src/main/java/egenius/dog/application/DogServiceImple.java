@@ -50,16 +50,7 @@ public class DogServiceImple implements DogService {
     public void signUpRegisterDog(DogSignUpRegistrationRequestDto dogSignUpRegistrationRequestDto) {
         User user = userRepository.findByUserEmail(dogSignUpRegistrationRequestDto.getUserEmail())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
-
-        if (dogSignUpRegistrationRequestDto.getDefaultDog()) {
-            // 기존에 default true값이 있다면 false로 변경
-            // todo: existsById로 변경
-            DogList dogList1 = dogListRepository.findByUserIdAndDefaultDog(user.getId(), true);
-
-            if (dogList1 != null)
-                dogList1.updateDefaultDog(false);
-        }
-
+        // 첫 회원가입 반려견은 true로 설정
         Dog dog = modelMapper.map(dogSignUpRegistrationRequestDto, Dog.class);
 
         // dogbreedId로 dogBreed 조회 및 dog에 저장
@@ -72,7 +63,7 @@ public class DogServiceImple implements DogService {
         DogList dogList = DogList.builder()
                 .dog(dog)
                 .user(user)
-                .defaultDog(dogSignUpRegistrationRequestDto.getDefaultDog())
+                .defaultDog(true)
                 .build();
 
         dogListRepository.save(dogList);
@@ -87,19 +78,6 @@ public class DogServiceImple implements DogService {
         User user = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
 
-        /**
-         * dogRegistrationRequestDto에서 true값이 들어오고 기존에 다른 default true값이 있다면 false로 변경 하고
-         * 새로운 반려견을 default true로 변경
-         */
-
-        if (dogRegistrationRequestDto.getDefaultDog()) {
-            // 기존에 default true값이 있다면 false로 변경
-            DogList dogList1 = dogListRepository.findByUserIdAndDefaultDog(user.getId(), true);
-
-            if (dogList1 != null)
-                dogList1.updateDefaultDog(false);
-        }
-
         Dog dog = modelMapper.map(dogRegistrationRequestDto, Dog.class);
 
         // dogbreedId로 dogBreed 조회 및 dog에 저장
@@ -107,6 +85,12 @@ public class DogServiceImple implements DogService {
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_DOG_BREED));
         dog.setDogBreed(dogBreed);
         dogRepository.save(dog);
+
+        // dogRegistrationRequestDto getDefaultDog가 true이고 기존에 defaultDog가 true인 값이 있다면 false로 변경
+        if (dogRegistrationRequestDto.getDefaultDog()) {
+            DogList dogList = dogListRepository.findByUserIdAndDefaultDog(user.getId(), true);
+            dogList.updateDefaultDog(false);
+        }
 
         // dogList의 default값 변경
         DogList dogList = DogList.builder()
