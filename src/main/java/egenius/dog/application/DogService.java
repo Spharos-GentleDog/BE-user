@@ -2,6 +2,7 @@ package egenius.dog.application;
 
 import egenius.dog.dto.DogDefaultUpdateRequestDto;
 import egenius.dog.dto.DogRegistrationRequestDto;
+import egenius.dog.dto.DogSignUpRegistrationRequestDto;
 import egenius.dog.dto.DogUpdateRequestDto;
 import egenius.dog.entity.DogBreed;
 import egenius.dog.response.DogBreedInfoResponse;
@@ -11,6 +12,7 @@ import java.util.List;
 
 public interface DogService {
 
+    void signUpRegisterDog(DogSignUpRegistrationRequestDto dogSignUpRegistrationRequestDto);
     void registerDog(String userEmail, DogRegistrationRequestDto dogRegistrationRequestDto);
     List<DogBreedInfoResponse> getDogBreedInfo();
     List<DogInfoResponse> getDogInfo(String userEmail);

@@ -2,6 +2,7 @@ package egenius.dog.application;
 
 import egenius.dog.dto.DogDefaultUpdateRequestDto;
 import egenius.dog.dto.DogRegistrationRequestDto;
+import egenius.dog.dto.DogSignUpRegistrationRequestDto;
 import egenius.dog.dto.DogUpdateRequestDto;
 import egenius.dog.entity.Dog;
 import egenius.dog.entity.DogBreed;
@@ -30,12 +31,13 @@ import java.util.List;
 public class DogServiceImple implements DogService {
 
     /**
-     * 1. 유저 반려견 등록
-     * 2. 반려견 전체 품종 조회
-     * 3. 반려견 정보 조회
-     * 4. 반려견 정보 수정
-     * 5. 대표 반려견 변경
-     * 6. 반려견 정보 삭제
+     * 1. 유저 회원가입 시 반려견 등록
+     * 2. 유저 반려견 등록
+     * 3. 반려견 전체 품종 조회
+     * 4. 반려견 정보 조회
+     * 5. 반려견 정보 수정
+     * 6. 대표 반려견 변경
+     * 7. 반려견 정보 삭제
      */
 
     private final UserRepository userRepository;
@@ -43,6 +45,38 @@ public class DogServiceImple implements DogService {
     private final DogListRepository dogListRepository;
     private final DogBreedRepository dogBreedRepository;
     private final ModelMapper modelMapper;
+
+    @Override
+    public void signUpRegisterDog(DogSignUpRegistrationRequestDto dogSignUpRegistrationRequestDto) {
+        User user = userRepository.findByUserEmail(dogSignUpRegistrationRequestDto.getUserEmail())
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+
+        if (dogSignUpRegistrationRequestDto.getDefaultDog()) {
+            // 기존에 default true값이 있다면 false로 변경
+            // todo: existsById로 변경
+            DogList dogList1 = dogListRepository.findByUserIdAndDefaultDog(user.getId(), true);
+
+            if (dogList1 != null)
+                dogList1.updateDefaultDog(false);
+        }
+
+        Dog dog = modelMapper.map(dogSignUpRegistrationRequestDto, Dog.class);
+
+        // dogbreedId로 dogBreed 조회 및 dog에 저장
+        DogBreed dogBreed = dogBreedRepository.findById(dogSignUpRegistrationRequestDto.getDogBreed())
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_DOG_BREED));
+        dog.setDogBreed(dogBreed);
+        dogRepository.save(dog);
+
+        // dogList의 default값 변경
+        DogList dogList = DogList.builder()
+                .dog(dog)
+                .user(user)
+                .defaultDog(dogSignUpRegistrationRequestDto.getDefaultDog())
+                .build();
+
+        dogListRepository.save(dogList);
+    }
 
     /**
      * 1. 유저 반려견 등록

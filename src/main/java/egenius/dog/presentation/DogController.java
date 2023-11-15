@@ -2,6 +2,7 @@ package egenius.dog.presentation;
 
 import egenius.dog.application.DogService;
 import egenius.dog.dto.DogDefaultUpdateRequestDto;
+import egenius.dog.dto.DogSignUpRegistrationRequestDto;
 import egenius.dog.dto.DogUpdateRequestDto;
 import egenius.dog.response.DogBreedInfoResponse;
 import egenius.dog.response.DogInfoResponse;
@@ -23,7 +24,24 @@ public class DogController {
 
     private final DogService dogService;
 
-    @Operation(summary = "반려견 등록", description = "반려견 등록", tags = { "User Dog" })
+    /**
+     * 1. 유저 회원가입 시 반려견 등록
+     * 2. 유저 반려견 등록
+     * 3. 반려견 전체 품종 조회
+     * 4. 반려견 정보 조회
+     * 5. 반려견 정보 수정
+     * 6. 대표 반려견 변경
+     * 7. 반려견 정보 삭제
+     */
+
+    @Operation(summary = "로그인 이전 반려견 등록", description = "로그인 이후 필터 필요없는 반려견 등록", tags = { "User Dog" })
+    @PostMapping("/signup/")
+    public BaseResponse<?> dogSignUpRegister(@RequestBody DogSignUpRegistrationRequestDto dogSignUpRegistrationRequestDto) {
+        dogService.signUpRegisterDog(dogSignUpRegistrationRequestDto);
+        return new BaseResponse<>();
+    }
+
+    @Operation(summary = "로그인 이후 반려견 등록", description = "로그인 이후 필터 필요한 반려견 등록", tags = { "User Dog" })
     @PostMapping("")
     public BaseResponse<?> dogRegister(@RequestHeader("userEmail") String userEmail,
                                        @RequestBody DogRegistrationRequestDto dogRegistrationRequestDto) {
