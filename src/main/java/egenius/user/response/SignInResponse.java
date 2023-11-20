@@ -14,6 +14,7 @@ public class SignInResponse {
     private String refreshToken;
     private String userEmail;
     private String usersName;
+    private Long dogId;
     private String role;
 
 }

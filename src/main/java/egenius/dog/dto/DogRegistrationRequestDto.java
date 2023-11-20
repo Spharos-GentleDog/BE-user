@@ -1,6 +1,5 @@
 package egenius.dog.dto;
 
-import egenius.dog.entity.DogBreed;
 import lombok.Getter;
 
 @Getter

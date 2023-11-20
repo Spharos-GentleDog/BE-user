@@ -1,6 +1,5 @@
 package egenius.dog.entity;
 
-import egenius.dog.dto.DogRegistrationRequestDto;
 import egenius.dog.dto.DogUpdateRequestDto;
 import egenius.global.base.BaseTimeEntity;
 import jakarta.persistence.*;

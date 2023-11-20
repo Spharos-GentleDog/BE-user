@@ -1,5 +1,7 @@
 package egenius.user.application;
 
+import egenius.dog.entity.DogList;
+import egenius.dog.infrastructure.DogListRepository;
 import egenius.global.base.BaseResponseStatus;
 import egenius.user.dto.SignUpRequestDto;
 import egenius.user.entity.User;
@@ -29,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 public class AuthenticationServiceImple implements AuthenticationService{
 
     private final UserRepository userRepository;
+    private final DogListRepository dogListRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
     private final ModelMapper modelMapper;
@@ -70,6 +73,9 @@ public class AuthenticationServiceImple implements AuthenticationService{
         User user = userRepository.findByUserEmail(signInRequestDto.getUserEmail())
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.FAILED_TO_LOGIN));
 
+        // 강아지 리스트에서 대표 반려견을 찾고 해당하는 반려견의 정보를 넘겨준다.
+        DogList dogList = dogListRepository.findByUserIdAndDefaultDog(user.getId(), Boolean.TRUE);
+
         // 탈퇴한 회원이면 로그인 불가
         if (user.getDeletedAt() != null) {
             throw new BaseException(BaseResponseStatus.WITHDRAWAL_USER);
@@ -96,6 +102,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
                 .refreshToken(refreshToken)
                 .userEmail(user.getUserEmail())
                 .usersName(user.getUsersName())
+                .dogId(dogList.getDog().getId())
                 .role("USER")
                 .build();
     }
@@ -108,10 +115,9 @@ public class AuthenticationServiceImple implements AuthenticationService{
         User user = userRepository.findByUserEmail(email)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
 
-        log.info("refreshToken is : {}" , refreshToken);
 
+        log.info("refreshToken is : {}" , refreshToken);
         log.info("user : {}" , user);
-        log.info("user is : {}" , user.getUsersName());
 
         // key userEmain로 value refreshToken 가져온다
         String redisInRefreshToken = (String) redisTemplate.opsForValue().get(email);

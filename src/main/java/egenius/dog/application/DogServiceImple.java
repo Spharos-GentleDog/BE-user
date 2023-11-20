@@ -2,16 +2,17 @@ package egenius.dog.application;
 
 import egenius.dog.dto.DogDefaultUpdateRequestDto;
 import egenius.dog.dto.DogRegistrationRequestDto;
-import egenius.dog.dto.DogSignUpRegistrationRequestDto;
 import egenius.dog.dto.DogUpdateRequestDto;
 import egenius.dog.entity.Dog;
 import egenius.dog.entity.DogBreed;
 import egenius.dog.entity.DogList;
-import egenius.dog.infrastructure.DogBreedRepository;
 import egenius.dog.infrastructure.DogListRepository;
+import egenius.dog.response.DogInfoResponse;
+import egenius.dog.dto.DogSignUpRegistrationRequestDto;
+import egenius.dog.infrastructure.DogBreedRepository;
 import egenius.dog.infrastructure.DogRepository;
 import egenius.dog.response.DogBreedInfoResponse;
-import egenius.dog.response.DogInfoResponse;
+import egenius.dog.response.DogDefaultInfoResponse;
 import egenius.global.base.BaseResponseStatus;
 import egenius.global.exception.BaseException;
 import egenius.user.entity.User;
@@ -34,10 +35,11 @@ public class DogServiceImple implements DogService {
      * 1. 유저 회원가입 시 반려견 등록
      * 2. 유저 반려견 등록
      * 3. 반려견 전체 품종 조회
-     * 4. 반려견 정보 조회
-     * 5. 반려견 정보 수정
-     * 6. 대표 반려견 변경
-     * 7. 반려견 정보 삭제
+     * 4. id로 반려견 정보 조회
+     * 5. 전체 반려견 정보 조회
+     * 6. 반려견 정보 수정
+     * 7. 대표 반려견 변경
+     * 8. 반려견 정보 삭제
      */
 
     private final UserRepository userRepository;
@@ -70,7 +72,7 @@ public class DogServiceImple implements DogService {
     }
 
     /**
-     * 1. 유저 반려견 등록
+     * 유저 반려견 등록
      * @param dogRegistrationRequestDto
      */
     @Override
@@ -103,7 +105,7 @@ public class DogServiceImple implements DogService {
     }
 
     /**
-     * 2. 반려견 전체 품종 조회
+     * 반려견 전체 품종 조회
      *
      * @return
      */
@@ -117,7 +119,25 @@ public class DogServiceImple implements DogService {
     }
 
     /**
-     * 3. 반려견 정보 조회
+     * id로 반려견 정보 조회
+     * @param userEmail
+     * @param dogId
+     * @return
+     */
+    @Override
+    public DogInfoResponse getDogInfo(String userEmail, Long dogId) {
+        Dog dog = dogRepository.findById(dogId)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_DOG));
+
+        DogInfoResponse dogInfoResponse = modelMapper.map(dog, DogInfoResponse.class);
+        return dogInfoResponse.toBuilder()
+                .dogBreedKorName(dog.getDogBreed().getDogBreedKorName())
+                .build();
+
+    }
+
+    /**
+     * 전체 반려견 정보 조회
      * @param userEmail
      * @return
      */
@@ -146,7 +166,7 @@ public class DogServiceImple implements DogService {
     }
 
     /**
-     * 4. 반려견 정보 수정
+     * 반려견 정보 수정
      * @param dogId
      * @param dogUpdateRequestDto
      */
@@ -160,13 +180,13 @@ public class DogServiceImple implements DogService {
     }
 
     /**
-     * 5. 대표 반려견 변경
+     * 대표 반려견 변경
      * @param userEmail
      * @param dogDefaultUpdateRequestDto
      * @return
      */
     @Override
-    public void updateRepresentativeDog(String userEmail, DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto) {
+    public DogDefaultInfoResponse updateRepresentativeDog(String userEmail, DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto) {
 
         User user  = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
@@ -181,10 +201,16 @@ public class DogServiceImple implements DogService {
         // 2. newDogId로 dogList의 defaultDog를 true로 변경
         DogList dogList = dogListRepository.findByDogId(dogDefaultUpdateRequestDto.getNewDefaultDogId());
         dogList.updateDefaultDog(true);
+
+        // 3. dogList에서 대표 반려견 이미지를 전달해준다.
+        Dog dog = dogList.getDog();
+        return DogDefaultInfoResponse.builder()
+                .DogId(dog.getId())
+                .build();
     }
 
     /**
-     * 6. 반려견 정보 삭제
+     * 반려견 정보 삭제
      * @param dogId
      */
     @Override
