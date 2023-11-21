@@ -64,13 +64,6 @@ public class DogController {
         return new BaseResponse<>(dogInfoResponse);
     }
 
-    @Operation(summary = "대표 반려견 정보 조회", description = "대표 반려견 정보 조회", tags = { "User Dog" })
-    @GetMapping("/default")
-    public BaseResponse<DogDefaultInfoResponse> dogDefaultInfo(@RequestHeader("userEmail") String userEmail) {
-        DogDefaultInfoResponse dogDefaultInfoResponse = dogService.getDogDefaultInfo(userEmail);
-        return new BaseResponse<>(dogDefaultInfoResponse);
-    }
-
     @Operation(summary = "id로 특정 반려견 정보 조회", description = "id로 특정 반려견 정보 조회", tags = { "User Dog" })
     @GetMapping("/{dogId}")
     public BaseResponse<DogInfoResponse> dogInfoById(@RequestHeader("userEmail") String userEmail,
