@@ -103,6 +103,24 @@ public class AddressServiceImple implements AddressService {
 
     }
 
+    @Override
+    public AddressInfoResponse findDefaultAddress(String userEmail) {
+        User user = userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+
+        AddressList addressList = addressListRepository.findByUserIdAndDefaultAddress(user.getId(), true);
+        if (addressList != null) {
+            Address address = addressList.getAddress();
+            AddressInfoResponse addressInfoResponse = modelMapper.map(address, AddressInfoResponse.class);
+            addressInfoResponse = addressInfoResponse.toBuilder()
+                    .defaultAddress(addressList.getDefaultAddress())
+                    .build();
+            return addressInfoResponse;
+        } else {
+            return null;
+        }
+    }
+
     /**
      * @param addressId
      * @param addressRegistrationRequestDto

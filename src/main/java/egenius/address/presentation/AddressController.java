@@ -52,6 +52,13 @@ public class AddressController {
         return new BaseResponse<>();
     }
 
+    @Operation(summary = "대표 배송지 조회", description = "대표 배송지 조회", tags = { "User Address" })
+    @GetMapping("/default")
+    public BaseResponse<AddressInfoResponse> addressFindDefault(@RequestHeader("userEmail") String userEmail) {
+        AddressInfoResponse addressInfoResponse = addressService.findDefaultAddress(userEmail);
+        return new BaseResponse<>(addressInfoResponse);
+    }
+
     @Operation(summary = "대표 배송지 변경", description = "대표 배송지 변경", tags = { "User Address" })
     @PutMapping("/default")
     public BaseResponse<?> addressUpdateDefault(@RequestHeader("userEmail") String userEmail,
