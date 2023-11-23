@@ -98,7 +98,7 @@ public class UserServiceImple implements UserService{
         if (new BCryptPasswordEncoder().matches(newPassword, user.getPassword())) {
             throw new BaseException(BaseResponseStatus.PASSWORD_SAME_FAILED);
         } else if (newPassword.contains(email)) {
-            throw new BaseException(BaseResponseStatus.PASSWORD_UPDATE_FAILED);
+            throw new BaseException(BaseResponseStatus.PASSWORD_CONTAIN_EMAIL_FAILED);
         } else if (newPassword.contains(middleNum) || newPassword.contains(lastNum)) {
             throw new BaseException(BaseResponseStatus.PASSWORD_CONTAIN_NUM_FAILED);
         } else {

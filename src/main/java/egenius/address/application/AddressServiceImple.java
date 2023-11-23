@@ -85,17 +85,20 @@ public class AddressServiceImple implements AddressService {
     public List<AddressInfoResponse> findAddress(String userEmail) {
         User user = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
-        // 유저의 주소지 리스트를 조회
-        List<AddressList> addressListList = addressListRepository.findAllByUserId(user.getId());
 
+        // 유저의 주소지 리스트를 조회
+        List<AddressList> addressListList = addressListRepository.findByUserId(user.getId());
+        log.info("{}", addressListList);
         // 주소지 리스트를 AddressInfoResponse로 매핑
         return addressListList.stream().map(item -> {
             // 주소지 엔터티를 조회
             Address address = item.getAddress();
             // 주소지 엔터티를 AddressInfoResponse로 매핑
+
             AddressInfoResponse addressInfoResponse = modelMapper.map(address, AddressInfoResponse.class);
             // 주소지 엔터티의 defaultAddress값을 AddressInfoResponse에 넣어준다.
             addressInfoResponse = addressInfoResponse.toBuilder()
+                    .addressId(item.getAddress().getId())
                     .defaultAddress(item.getDefaultAddress())
                     .build();
             return addressInfoResponse;
