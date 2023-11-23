@@ -46,9 +46,10 @@ public class AddressController {
 
     @Operation(summary = "배송지 수정", description = "배송지 수정", tags = { "User Address" })
     @PutMapping("")
-    public BaseResponse<?> addressUpdate(@RequestParam("addressId") Long addressId,
+    public BaseResponse<?> addressUpdate(@RequestHeader("userEmail") String userEmail,
+                                         @RequestParam("addressId") Long addressId,
                                          @RequestBody AddressRegistrationRequestDto addressRegistrationRequestDto) {
-        addressService.updateAddress(addressId, addressRegistrationRequestDto);
+        addressService.updateAddress(userEmail, addressId, addressRegistrationRequestDto);
         return new BaseResponse<>();
     }
 

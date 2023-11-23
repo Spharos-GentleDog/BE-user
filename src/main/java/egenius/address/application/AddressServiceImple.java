@@ -129,11 +129,28 @@ public class AddressServiceImple implements AddressService {
      * @param addressRegistrationRequestDto
      */
     @Override
-    public void updateAddress(Long addressId, AddressRegistrationRequestDto addressRegistrationRequestDto) {
+    public void updateAddress(String userEmail, Long addressId, AddressRegistrationRequestDto addressRegistrationRequestDto) {
+        User user = userRepository.findByUserEmail(userEmail)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+
+        // addressList에서 true값이 들어오고 기존에 기존에 다른 default true값이 있다면 false로 변경 하고
+        // address에 default true값을 넣어준다.
+        if (addressRegistrationRequestDto.getDefaultAddress()) {
+            AddressList addressList1 = addressListRepository.findByUserIdAndDefaultAddress(user.getId(),
+                    true);
+
+            if (addressList1 != null) {
+                addressList1.updateDefaultAddress(false);
+            }
+        }
+
+        //
         Address address = addressRepository.findById(addressId)
                         .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_ADDRESS));
-
         address.updateAddress(addressRegistrationRequestDto);
+
+        AddressList addressList = addressListRepository.findByUserIdAndAddressId(user.getId(), addressId);
+        addressList.updateDefaultAddress(addressRegistrationRequestDto.getDefaultAddress());
 
     }
 
