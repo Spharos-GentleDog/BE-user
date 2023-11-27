@@ -4,7 +4,7 @@ import egenius.dog.dto.DogDefaultUpdateRequestDto;
 import egenius.dog.dto.DogRegistrationRequestDto;
 import egenius.dog.dto.DogUpdateRequestDto;
 import egenius.dog.response.DogBreedInfoResponse;
-import egenius.dog.response.DogDefaultInfoResponse;
+import egenius.dog.response.DogIdInfoResponse;
 import egenius.dog.response.DogInfoResponse;
 import egenius.dog.dto.DogSignUpRegistrationRequestDto;
 
@@ -17,7 +17,8 @@ public interface DogService {
     List<DogBreedInfoResponse> getDogBreedInfo();
     DogInfoResponse getDogInfo(String userEmail, Long dogId);
     List<DogInfoResponse> getDogInfo(String userEmail);
+    List<Long> getDogBreedInfoByEngName(String engName);
     void updateDog(Long dogListId, DogUpdateRequestDto dogUpdateRequestDto);
-    DogDefaultInfoResponse updateRepresentativeDog(String userEmail, DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto);
+    DogIdInfoResponse updateRepresentativeDog(String userEmail, DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto);
     void deleteDog(Long dogId);
 }

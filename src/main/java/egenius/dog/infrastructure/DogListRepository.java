@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DogListRepository extends JpaRepository<DogList, Long> {
 
@@ -14,7 +15,7 @@ public interface DogListRepository extends JpaRepository<DogList, Long> {
             "ORDER BY a.defaultDog DESC")
     List<DogList> findByUserId(@Param("userId")Long userId);
     DogList findByUserIdAndDogId(Long userId, Long dogId);
-    DogList findByUserIdAndDefaultDog(Long userId, Boolean defaultDog);
+    Optional<DogList> findByUserIdAndDefaultDog(Long userId, Boolean defaultDog);
     DogList findByDogId(Long dogId);
 
 }

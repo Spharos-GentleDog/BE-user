@@ -22,6 +22,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -74,7 +75,10 @@ public class AuthenticationServiceImple implements AuthenticationService{
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.FAILED_TO_LOGIN));
 
         // 강아지 리스트에서 대표 반려견을 찾고 해당하는 반려견의 정보를 넘겨준다.
-        DogList dogList = dogListRepository.findByUserIdAndDefaultDog(user.getId(), Boolean.TRUE);
+        // 없다면 null을 넘겨준다
+        Optional<DogList> dogList = dogListRepository.findByUserIdAndDefaultDog(user.getId(), Boolean.TRUE);
+        Long dogId = null;
+        dogId = dogList.map(DogList::getId).orElse(null);
 
         // 탈퇴한 회원이면 로그인 불가
         if (user.getDeletedAt() != null) {
@@ -102,7 +106,7 @@ public class AuthenticationServiceImple implements AuthenticationService{
                 .refreshToken(refreshToken)
                 .userEmail(user.getUserEmail())
                 .usersName(user.getUsersName())
-                .dogId(dogList.getDog().getId())
+                .dogId(dogId)
                 .role("USER")
                 .build();
     }

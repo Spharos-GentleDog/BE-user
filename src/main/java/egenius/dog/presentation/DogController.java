@@ -5,7 +5,7 @@ import egenius.dog.dto.DogUpdateRequestDto;
 import egenius.dog.application.DogService;
 import egenius.dog.dto.DogSignUpRegistrationRequestDto;
 import egenius.dog.response.DogBreedInfoResponse;
-import egenius.dog.response.DogDefaultInfoResponse;
+import egenius.dog.response.DogIdInfoResponse;
 import egenius.dog.response.DogInfoResponse;
 import egenius.global.base.BaseResponse;
 import egenius.dog.dto.DogRegistrationRequestDto;
@@ -72,7 +72,12 @@ public class DogController {
         return new BaseResponse<>(dogInfoResponse);
     }
 
-
+    @Operation(summary = "반려견 영어 이름으로 모든 dogId 조회", description = "반려견 영어 이름으로 모든 dogId 조회", tags = { "User Dog" })
+    @GetMapping("/breeds-eng-name/{breedEngName}")
+    public BaseResponse<List<Long>> dogBreedInfoByEngName(@PathVariable("breedEngName") String breedEngName) {
+        List<Long> dogIdInfoResponse = dogService.getDogBreedInfoByEngName(breedEngName);
+        return new BaseResponse<>(dogIdInfoResponse);
+    }
 
     @Operation(summary = "반려견 정보 수정", description = "반려견 정보 수정", tags = { "User Dog" })
     @PutMapping("")
@@ -85,10 +90,10 @@ public class DogController {
     @Operation(summary = "대표 반려견 변경", description = "현재 대표 반려견 false로 변경하고 새로운 대표 반려견 true 변경",
             tags = { "User Dog" })
     @PutMapping("/default")
-    public BaseResponse<DogDefaultInfoResponse> dogRepresentativeUpdate(@RequestHeader("userEmail") String userEmail,
-                                                   @RequestBody DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto) {
-        DogDefaultInfoResponse dogDefaultInfoResponse = dogService.updateRepresentativeDog(userEmail, dogDefaultUpdateRequestDto);
-        return new BaseResponse<>(dogDefaultInfoResponse);
+    public BaseResponse<DogIdInfoResponse> dogRepresentativeUpdate(@RequestHeader("userEmail") String userEmail,
+                                                                   @RequestBody DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto) {
+        DogIdInfoResponse dogIdInfoResponse = dogService.updateRepresentativeDog(userEmail, dogDefaultUpdateRequestDto);
+        return new BaseResponse<>(dogIdInfoResponse);
     }
 
     @Operation(summary = "반려견 정보 삭제", description = "반려견 정보 삭제", tags = { "User Dog" })

@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class DogDefaultInfoResponse {
+public class DogIdInfoResponse {
     Long DogId;
 }

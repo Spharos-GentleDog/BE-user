@@ -12,7 +12,7 @@ import egenius.dog.dto.DogSignUpRegistrationRequestDto;
 import egenius.dog.infrastructure.DogBreedRepository;
 import egenius.dog.infrastructure.DogRepository;
 import egenius.dog.response.DogBreedInfoResponse;
-import egenius.dog.response.DogDefaultInfoResponse;
+import egenius.dog.response.DogIdInfoResponse;
 import egenius.global.base.BaseResponseStatus;
 import egenius.global.exception.BaseException;
 import egenius.user.entity.User;
@@ -23,7 +23,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -37,9 +39,10 @@ public class DogServiceImple implements DogService {
      * 3. 반려견 전체 품종 조회
      * 4. id로 반려견 정보 조회
      * 5. 전체 반려견 정보 조회
-     * 6. 반려견 정보 수정
-     * 7. 대표 반려견 변경
-     * 8. 반려견 정보 삭제
+     * 6. 반려견 영어 이름으로 품종 조회
+     * 7. 반려견 정보 수정
+     * 8. 대표 반려견 변경
+     * 9. 반려견 정보 삭제
      */
 
     private final UserRepository userRepository;
@@ -90,8 +93,8 @@ public class DogServiceImple implements DogService {
 
         // dogRegistrationRequestDto getDefaultDog가 true이고 기존에 defaultDog가 true인 값이 있다면 false로 변경
         if (dogRegistrationRequestDto.getDefaultDog()) {
-            DogList dogList = dogListRepository.findByUserIdAndDefaultDog(user.getId(), true);
-            dogList.updateDefaultDog(false);
+            Optional<DogList> dogList = dogListRepository.findByUserIdAndDefaultDog(user.getId(), true);
+            dogList.ifPresent(list -> list.updateDefaultDog(false));
         }
 
         // dogList의 default값 변경
@@ -165,6 +168,25 @@ public class DogServiceImple implements DogService {
 
     }
 
+    @Override
+    public List<Long> getDogBreedInfoByEngName(String engName) {
+        DogBreed dogBreed = dogBreedRepository.findByDogBreedEngName(engName)
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_DOG_BREED));
+
+        List<Dog> dogList = dogRepository.findAllByDogBreedId(dogBreed.getId());
+
+        // dog 리스트에서 dogId만 추출해서 하나의 리스트 만듬
+        if (dogList != null) {
+            List<Long> dogIdList = new ArrayList<>();
+            for (Dog dog : dogList) {
+                dogIdList.add(dog.getId());
+            }
+            return dogIdList;
+        } else {
+            throw new BaseException(BaseResponseStatus.NO_EXIST_DOG_LIST);
+        }
+    }
+
     /**
      * 반려견 정보 수정
      * @param dogId
@@ -186,7 +208,7 @@ public class DogServiceImple implements DogService {
      * @return
      */
     @Override
-    public DogDefaultInfoResponse updateRepresentativeDog(String userEmail, DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto) {
+    public DogIdInfoResponse updateRepresentativeDog(String userEmail, DogDefaultUpdateRequestDto dogDefaultUpdateRequestDto) {
 
         User user  = userRepository.findByUserEmail(userEmail)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
@@ -204,7 +226,7 @@ public class DogServiceImple implements DogService {
 
         // 3. dogList에서 대표 반려견 이미지를 전달해준다.
         Dog dog = dogList.getDog();
-        return DogDefaultInfoResponse.builder()
+        return DogIdInfoResponse.builder()
                 .DogId(dog.getId())
                 .build();
     }
