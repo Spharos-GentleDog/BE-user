@@ -47,7 +47,7 @@ public enum BaseResponseStatus {
     // Dog
     NO_EXIST_DOG_BREED(HttpStatus.NOT_FOUND, false, 2200, "존재하지 않는 품종입니다."),
     NO_EXIST_DOG(HttpStatus.NOT_FOUND, false, 2201, "존재하지 않는 반려견입니다."),
-    NO_EXIST_DOG_LIST(HttpStatus.OK, false, 2202, "해당 품종에 대한 반려견 정보가 존재하지 않습니다."),
+    NO_EXIST_DOG_BREED_INFO(HttpStatus.OK, false, 2202, "해당 품종에 대한 다른 유저의 정보가 존재하지 않습니다."),
 
     // Address
     NO_EXIST_ADDRESS(HttpStatus.NOT_FOUND, false, 2300, "존재하지 않는 주소입니다.");

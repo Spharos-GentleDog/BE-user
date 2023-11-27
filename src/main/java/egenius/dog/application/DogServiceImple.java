@@ -168,22 +168,27 @@ public class DogServiceImple implements DogService {
 
     }
 
+    /**
+     * 반려견 영어 이름으로 품종 조회
+     * @param engName
+     * @return
+     */
     @Override
     public List<Long> getDogBreedInfoByEngName(String engName) {
         DogBreed dogBreed = dogBreedRepository.findByDogBreedEngName(engName)
                 .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_DOG_BREED));
 
         List<Dog> dogList = dogRepository.findAllByDogBreedId(dogBreed.getId());
-
+        log.info("dogList : {}", dogList);
         // dog 리스트에서 dogId만 추출해서 하나의 리스트 만듬
-        if (dogList != null) {
+        if (dogList.isEmpty()) {
+            throw new BaseException(BaseResponseStatus.NO_EXIST_DOG_BREED_INFO);
+        } else {
             List<Long> dogIdList = new ArrayList<>();
             for (Dog dog : dogList) {
                 dogIdList.add(dog.getId());
             }
             return dogIdList;
-        } else {
-            throw new BaseException(BaseResponseStatus.NO_EXIST_DOG_LIST);
         }
     }
 
