@@ -73,7 +73,7 @@ public class DogController {
     }
 
     @Operation(summary = "반려견 영어 이름으로 모든 dogId 조회", description = "반려견 영어 이름으로 모든 dogId 조회", tags = { "User Dog" })
-    @GetMapping("/breeds-eng-name/{breedEngName}")
+    @GetMapping("/breeds/eng-name/{breedEngName}")
     public BaseResponse<List<Long>> dogBreedInfoByEngName(@PathVariable("breedEngName") String breedEngName) {
         List<Long> dogIdInfoResponse = dogService.getDogBreedInfoByEngName(breedEngName);
         return new BaseResponse<>(dogIdInfoResponse);

@@ -1,5 +1,6 @@
 package egenius.user.response;
 
+import egenius.user.entity.UserGenderStatus;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,6 @@ public class UserInfoResponse {
     private String usersName;
     private String userPhoneNumber;
     private Integer userAge;
-    private Integer userGender;
+    private UserGenderStatus userGender;
 
 }

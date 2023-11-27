@@ -8,12 +8,12 @@ import java.util.Arrays;
 import java.util.Objects;
 
 // BaseEnum<T,K>의 구현체인 Enum클래스와, T, K를 매개변수로 받아서 생성된다
-public class AbstractBaseEnumConverter<E extends Enum<E> & BaseEnum<V, K>, V, K> implements AttributeConverter<E, V> {
+public class BaseEnumConverter<E extends Enum<E> & BaseEnum<V, K>, V, K> implements AttributeConverter<E, V> {
     //필드값
     private final Class<E> eClass;
 
     //생성자
-    protected AbstractBaseEnumConverter(Class<E> eClass) {
+    protected BaseEnumConverter(Class<E> eClass) {
         this.eClass = eClass;
     }
 

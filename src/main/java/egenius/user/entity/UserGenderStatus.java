@@ -1,7 +1,7 @@
 package egenius.user.entity;
 
-import egenius.global.Enums.AbstractBaseEnumConverter;
 import egenius.global.Enums.BaseEnum;
+import egenius.global.Enums.BaseEnumConverter;
 import jakarta.persistence.Converter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public enum UserGenderStatus implements BaseEnum<Integer, String> {
 
     // 3. converter 구현
     @Converter(autoApply = true)
-    static class thisConverter extends AbstractBaseEnumConverter<UserGenderStatus, Integer, String> {
+    static class thisConverter extends BaseEnumConverter<UserGenderStatus, Integer, String> {
         public thisConverter() {
             super(UserGenderStatus.class);
         }

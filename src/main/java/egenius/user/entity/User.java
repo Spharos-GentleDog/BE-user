@@ -29,8 +29,9 @@ public class User extends BaseTimeEntity implements UserDetails {
     private String usersName;
     @Column(name = "user_age")
     private Integer userAge;
+    @Convert(converter = UserGenderConverter.class)
     @Column(name = "user_gender", columnDefinition = "tinyint")
-    private Integer userGender;
+    private UserGenderStatus userGender;
     @Column(name = "user_phone_number", length = 15, nullable = false)
     private String userPhoneNumber;
     @Column(name = "deleted_at")
@@ -54,7 +55,7 @@ public class User extends BaseTimeEntity implements UserDetails {
                                String usersName,
                                String userPhoneNumber,
                                Integer userAge,
-                               Integer userGender) {
+                               UserGenderStatus userGender) {
 
         this.userEmail = userEmail;
         this.usersName = usersName;
